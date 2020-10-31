@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="backgroundAnchorPane" prefHeight="831.0" prefWidth="1251.0" style="-fx-background-color: transparent;" styleClass="background" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenu">
+	<children>
+		<AnchorPane layoutX="-45.0" layoutY="-7.0" prefHeight="711.0" prefWidth="1017.0" styleClass="background" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="-45.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="-7.0">
+			<children>
+            <StackPane fx:id="parentContainer" layoutX="360.0" layoutY="23.0" styleClass="background" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="365.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
+               <children>
+      				<AnchorPane fx:id="currentSection" styleClass="background" StackPane.alignment="CENTER" />
+               </children>
+            </StackPane>
+				<AnchorPane layoutX="39.0" layoutY="8.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="674.0" prefWidth="333.0" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="39.0" AnchorPane.topAnchor="8.0">
+					<children>
+						<VBox fx:id="mainMenu" alignment="TOP_CENTER" layoutX="76.0" layoutY="84.0" prefHeight="663.0" prefWidth="328.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<children>
+                        <HBox alignment="BOTTOM_CENTER" prefHeight="80.0" prefWidth="333.0">
+                           <children>
+                              <FontAwesomeIconView fill="WHITE" glyphName="DATABASE" size="60" wrappingWidth="65.5714282989502" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="28.0" prefWidth="333.0">
+                           <children>
+      								<Label prefHeight="30.0" prefWidth="258.0" text="CRUD PROTOTYPE" textFill="WHITE">
+      									<font>
+      										<Font name="DejaVu Sans Bold" size="25.0" />
+      									</font>
+      								</Label>
+                           </children>
+                        </HBox>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="96.0" prefWidth="328.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="328.0">
+                                 <children>
+                                    <Label prefHeight="52.0" prefWidth="299.0" text="What do you want to do?" textFill="WHITE">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="326.0">
+                                 <children>
+                                    <JFXButton fx:id="userOperations" buttonType="RAISED" onAction="#switch2UserOperations" prefHeight="50.0" prefWidth="339.0" styleClass="operationButton" text="Users management" textFill="WHITE">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <graphic>
+                                          <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="25" strokeLineCap="ROUND" strokeLineJoin="ROUND" text="" wrappingWidth="35.0" />
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="36.0" prefWidth="328.0">
+                                 <children>
+                                    <JFXButton fx:id="exitButton" buttonType="RAISED" contentDisplay="RIGHT" onAction="#exit" prefHeight="35.0" prefWidth="118.0" text="Exit" textAlignment="CENTER" textFill="WHITE">
+                                       <graphic>
+                                          <FontAwesomeIconView fill="WHITE" glyphName="TIMES" size="15" textAlignment="RIGHT" wrappingWidth="20.0" />
+                                       </graphic>
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor></JFXButton>
+                                    <JFXButton buttonType="RAISED" contentDisplay="RIGHT" onAction="#maximizeWindow" prefHeight="35.0" prefWidth="123.0" text="Maximize" textAlignment="CENTER" textFill="WHITE">
+                                       <graphic>
+                                          <FontAwesomeIconView fill="WHITE" glyphName="ARROWS_ALT" size="15" textAlignment="RIGHT" wrappingWidth="20.0" />
+                                       </graphic>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </JFXButton>
+                                    <JFXButton buttonType="RAISED" contentDisplay="RIGHT" onAction="#minimizeWindow" prefHeight="35.0" prefWidth="118.0" text="Maximize" textAlignment="CENTER" textFill="WHITE">
+                                       <graphic>
+                                          <FontAwesomeIconView fill="WHITE" glyphName="ARROW_DOWN" size="15" textAlignment="RIGHT" wrappingWidth="20.0" />
+                                       </graphic>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+							</children>
+						</VBox>
+					</children>
+               <effect>
+                  <DropShadow />
+               </effect>
+				</AnchorPane>
+			</children>
+		</AnchorPane>
+	</children>
+</AnchorPane>
