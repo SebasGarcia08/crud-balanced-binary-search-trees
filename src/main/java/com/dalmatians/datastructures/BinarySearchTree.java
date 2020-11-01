@@ -39,6 +39,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		/** K, the key */
 		protected K key;
 
+		protected int height;
+		
 		/**
 		 * The data that Node encapsulates
 		 * 
@@ -50,6 +52,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 			this.right = null;
 			this.parent = null;
 			this.key = key;
+			this.height = 0;
 		}
 
 		/**
