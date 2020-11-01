@@ -40,7 +40,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		protected K key;
 
 		protected int height;
-		
+
 		/**
 		 * The data that Node encapsulates
 		 * 
@@ -216,25 +216,12 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	/** Number of modes in tree */
 	private int numberOfElements;
 
-	/** Whether to allow duplicate nodes */
-	private boolean allowDuplicates;
-
 	/**
 	 * Constructor
 	 */
 	public BinarySearchTree() {
 		this.root = null;
 		this.numberOfElements = 0;
-		this.allowDuplicates = true;
-	}
-
-	/**
-	 * Constructor
-	 */
-	public BinarySearchTree(boolean allowDuplicates) {
-		this.root = null;
-		this.numberOfElements = 0;
-		this.allowDuplicates = allowDuplicates;
 	}
 
 	/**
@@ -311,14 +298,13 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	 */
 	public void add(K key, V value) {
 		Node<K, V> newNode = new Node<>(key, value);
-		boolean duplicate = false;
 		boolean added = false;
 
 		if (root == null) {
 			root = newNode;
 		} else {
 			Node<K, V> currentNode = root;
-			while (!added && !duplicate) {
+			while (!added) {
 				if (newNode.isLessThan(currentNode)) {
 					if (currentNode.left == null) {
 						newNode.parent = currentNode;
@@ -327,7 +313,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 					} else {
 						currentNode = currentNode.left;
 					}
-				} else if (newNode.isGreaterThan(currentNode)) {
+				} else {
 					if (currentNode.right == null) {
 						newNode.parent = currentNode;
 						currentNode.right = newNode;
@@ -335,14 +321,9 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 					} else {
 						currentNode = currentNode.right;
 					}
-				} else {
-					duplicate = true;
 				}
 			}
 		}
-
-		if (!duplicate)
-			numberOfElements++;
 	}
 
 	public Node<K, V> getMaximum(Node<K, V> localRoot) {
