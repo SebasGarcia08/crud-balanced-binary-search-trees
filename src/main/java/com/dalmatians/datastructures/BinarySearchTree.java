@@ -3,6 +3,7 @@ package com.dalmatians.datastructures;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
@@ -34,7 +35,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		protected Node<K, V> right;
 
 		/** V, the data that the Node encapsulates */
-		protected V data;
+		protected V value;
 
 		/** K, the key */
 		protected K key;
@@ -47,181 +48,26 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		 * @param data, an object of a class K,V that implements Comparable interface
 		 */
 		public Node(K key, V data) {
-			this.data = data;
+			this.value = data;
 			this.left = null;
 			this.right = null;
 			this.parent = null;
 			this.key = key;
 			this.height = 0;
 		}
-
-		/**
-		 * Determines whether this is a leaf node
-		 * 
-		 * @return boolean, true if is leaf node; otherwise, false.
-		 */
-		public boolean isLeafNode() {
-			return (right == null && left == null);
-		}
-
-		/**
-		 * Determines whether this node has two children
-		 * 
-		 * @return boolean, true if this node has two children; otherwise, false.
-		 */
-		public boolean hasTwoChildren() {
-			return (right != null && left != null);
-		}
-
-		/**
-		 * Determines whether this node has only one child
-		 * 
-		 * @return boolean, true if this node has only one child; otherwise, false.
-		 */
-		public boolean hasOnlyOneChild() {
-			return hasOnlyLeftChild() || hasOnlyRightChild();
-		}
-
-		/**
-		 * Determines whether this node has only right child
-		 * 
-		 * @return boolean, true if this node has only right child; otherwise, false.
-		 */
-		public boolean hasOnlyRightChild() {
-			return (right != null && left == null);
-		}
-
-		/**
-		 * Determines whether this node has only left child
-		 * 
-		 * @return boolean, true if this node has only left child; otherwise, false.
-		 */
-		public boolean hasOnlyLeftChild() {
-			return (right == null && left != null);
-		}
-
-		/**
-		 * Determines whether this node is the right node of its parent node
-		 * 
-		 * @return boolean, true if this is the right node of its parent node or false
-		 *         if this is root node or if this is not the right node of its parent
-		 *         node
-		 */
-		public boolean isRightNode() {
-			return parent != null && parent.right == this;
-		}
-
-		/**
-		 * Determines whether this node is the left node of its parent node
-		 * 
-		 * @return boolean, true if this is the left node of its parent node or false if
-		 *         this is root node or if this is not the left node of its parent node
-		 */
-		public boolean isLeftNode() {
-			return parent != null && parent.left == this;
-		}
-
-		/**
-		 * Get the minimum node out of itself and the descendants of this node.
-		 * 
-		 * @return Node<K,V> {@link Node}, the maximum node under this node; if this is
-		 *         leaf node, returns itself.
-		 */
-		public Node<K, V> getMaximumNode() {
-			Node<K, V> curr = this;
-			while (curr.right != null)
-				curr = curr.right;
-			return curr;
-		}
-
-		/**
-		 * Get the minimum node out of itself and the descendants of this node.
-		 * 
-		 * @return Node<K,V> {@link Node}, the minimum node under this node; if this is
-		 *         leaf node, returns itself.
-		 */
-		public Node<K, V> getMinimumNode() {
-			Node<K, V> curr = this;
-			while (curr.left != null)
-				curr = curr.left;
-			return curr;
-		}
-
-		/**
-		 * Deletes itself. <b>pre:</b> This is not the root.
-		 * 
-		 * @return Node<K,V> {@link Node} this, the deleted node.
-		 */
-		public Node<K, V> delete() {
-			if (isLeafNode()) {
-				if (this.isLeftNode())
-					parent.left = null;
-				else
-					parent.right = null;
-			} else if (hasOnlyOneChild()) {
-				Node<K, V> child = (hasOnlyLeftChild()) ? this.left : this.right;
-				if (this.isLeftNode())
-					this.parent.left = child;
-				else
-					this.parent.right = child;
-				child.parent = this.parent;
-			} else {
-				this.data = this.left.getMaximumNode().delete().data;
-			}
-			return this;
-		}
-
-		/**
-		 * Compares this node with another
-		 * 
-		 * @param another, Node<K,V> {@link Node}
-		 * @return true if the data of this node us less than the data of another node
-		 *         based on its comparison criterion
-		 */
-		public boolean isLessThan(Node<K, V> another) {
-			return this.key.compareTo(another.key) < 0;
-		}
-
-		/**
-		 * Compares this node with another
-		 * 
-		 * @param another, Node<K,V> {@link Node}
-		 * @return true if the data of this node us grater than the data of another node
-		 *         based on its comparison criterion
-		 */
-		public boolean isGreaterThan(Node<K, V> another) {
-			return this.key.compareTo(another.key) > 0;
-		}
-
-		/**
-		 * Determines whether this node's data is equal to another's node data.
-		 * 
-		 * @param another, Node<K,V> {@link Node}
-		 * @return true if the data of this node is equal than the data of another node
-		 *         based on its comparison criterion
-		 */
-		public boolean dataIsEqualTo(Node<K, V> another) {
-			return this.key.compareTo(another.key) == 0;
-		}
-
-		@Override
-		public String toString() {
-			return this.data.toString();
-		}
 	}
 
 	/** Root node of the tree */
-	private Node<K, V> root;
+	protected Node<K, V> root;
 
-	/** Number of modes in tree */
-	private int numberOfElements;
-
+	protected int size;
+	
 	/**
 	 * Constructor
 	 */
 	public BinarySearchTree() {
 		this.root = null;
-		this.numberOfElements = 0;
+		this.size = 0;
 	}
 
 	/**
@@ -244,7 +90,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		// count
 		for (int i = count; i < space; i++)
 			System.out.print(" ");
-		System.out.print(root.data + "\n");
+		System.out.print(root.value + "\n");
 
 		// Process left child
 		print2DUtil(root.left, space);
@@ -287,9 +133,14 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	 * @param key
 	 * @return boolean, true if the element is within the tree; otherwise, false.
 	 */
-	public boolean search(K key) {
+	public boolean contains(K key) {
 		Node<K, V> found = searchNode(key);
-		return (found == null);
+		return (found != null);
+	}
+	
+	public V search(K key) {
+		Node<K,V> found = searchNode(key);
+		return (found == null) ? null: found.value; 
 	}
 
 	/**
@@ -297,34 +148,73 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	 * @param value
 	 */
 	public void add(K key, V value) {
-		Node<K, V> newNode = new Node<>(key, value);
-		boolean added = false;
-
-		if (root == null) {
-			root = newNode;
-		} else {
-			Node<K, V> currentNode = root;
-			while (!added) {
-				if (newNode.isLessThan(currentNode)) {
-					if (currentNode.left == null) {
-						newNode.parent = currentNode;
-						currentNode.left = newNode;
-						added = true;
-					} else {
-						currentNode = currentNode.left;
-					}
-				} else {
-					if (currentNode.right == null) {
-						newNode.parent = currentNode;
-						currentNode.right = newNode;
-						added = true;
-					} else {
-						currentNode = currentNode.right;
-					}
-				}
-			}
+		if (key == null)
+			throw new IllegalArgumentException("Key cannot be null");
+		else {
+			root = add(root, key, value);			
+			size++;
 		}
 	}
+
+	protected Node<K, V> add(Node<K, V> x, K key, V value) {
+		if (x == null)
+			return new Node<>(key, value);
+		int cmp = key.compareTo(x.key);
+		if (cmp < 0 && x.value != value) {
+			x.left = add(x.left, key, value);
+		} else if (cmp > 0 && x.value != value){
+			x.right = add(x.right, key, value);
+		} else {			
+			x.right = add(x.right, key, value);
+		}
+		return x;
+	}
+	
+	public void delete(K key, V value) {
+		if(key == null)  throw new IllegalArgumentException("argument to delete() is null");
+		if(contains(key)) {
+			root = delete(root, key, value);
+		}
+	}
+	
+	protected Node<K, V> delete(Node<K, V> node, K key, V value) {
+		int cmp = key.compareTo(node.key);
+		if (cmp < 0 && value != node.value) {
+			node.left = delete(node.left, key, value);
+		} else if (cmp > 0 && value != node.value) {
+			node.right = delete(node.right, key, value);
+		} else if (cmp == 0 && value == node.value){
+			if (node.left == null) {
+				return node.right;
+			} else if (node.right == null) {
+				return node.left;
+			} else {
+				Node<K, V> y = node;
+				node = getMinimum(y.right);
+				node.right = deleteMin(y.right);
+				node.left = y.left;
+			}
+			size--;
+		}
+		return node;
+	}
+	
+	public int size() {
+		return size;
+	}
+	
+	public void deleteMin() {
+		if (isEmpty())
+			throw new NoSuchElementException("called deleteMin() with empty symbol table");
+		root = deleteMin(root);
+	}
+
+    protected Node<K,V> deleteMin(Node<K,V> x) {
+        if (x.left == null) return x.right;
+        x.left = deleteMin(x.left);
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+        return x;
+    }
 
 	public Node<K, V> getMaximum(Node<K, V> localRoot) {
 		Node<K, V> currentNode = localRoot;
@@ -339,39 +229,31 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 			currentNode = currentNode.left;
 		return currentNode;
 	}
-
-	public V delete(K key) {
-		V deleted = null;
-		if (root != null) {
-			if (key.compareTo(root.key) == 0) { // If the root is the element that we want to delete
-				deleted = root.data;
-				if (root.isLeafNode())
-					root = null;
-				else if (root.hasOnlyOneChild())
-					root = (root.hasOnlyLeftChild()) ? root.left : root.right;
-				else
-					root.data = root.left.getMaximumNode().delete().data;
-			} else { // If the element to delete is not the root
-
-				Node<K, V> nodeFound = searchNode(key);
-				if (nodeFound != null) {
-					deleted = nodeFound.data;
-					nodeFound.delete();
-				}
-			}
-			numberOfElements--;
-		}
-		return deleted;
+    
+    /**
+     * Returns the height of the internal AVL tree. It is assumed that the
+     * height of an empty tree is -1 and the height of a tree with just one node
+     * is 0.
+     * 
+     * @return the height of the internal AVL tree
+     */
+    public int height() {
+        return height(root);
+    }
+    
+    protected int height(Node<K,V> x) {
+        if (x == null) return -1;
+        return x.height;
+    }
+	
+	public boolean isEmpty() {
+		return root == null;
 	}
-
+	
 	public V getRootData() {
-		return this.root.data;
+		return this.root.value;
 	}
-
-	public int getNumberOfElements() {
-		return numberOfElements;
-	}
-
+	
 	public void reset() {
 		this.root = null;
 	}
@@ -385,7 +267,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	private void inorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
 			inorder(root.left, list);
-			list.add(root.data);
+			list.add(root.value);
 			inorder(root.right, list);
 		}
 	}
@@ -398,7 +280,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 
 	private void preorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
-			list.add(root.data);
+			list.add(root.value);
 			preorder(root.left, list);
 			preorder(root.right, list);
 		}
@@ -414,7 +296,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		if (root != null) {
 			postorder(root.left, list);
 			postorder(root.right, list);
-			list.add(root.data);
+			list.add(root.value);
 		}
 	}
 
@@ -458,7 +340,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 			Node<K, V> node = stack.peek();
 			stack.pop();
 			pushPathToMin(node.right);
-			return node.data;
+			return node.value;
 		}
 
 		/** (Don't) remove an element from this iterator. */
