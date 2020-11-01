@@ -170,20 +170,20 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		return x;
 	}
 	
-	public void delete(K key, V value) {
+	public void delete(K key) {
 		if(key == null)  throw new IllegalArgumentException("argument to delete() is null");
 		if(contains(key)) {
-			root = delete(root, key, value);
+			root = delete(root, key);
 		}
 	}
 	
-	protected Node<K, V> delete(Node<K, V> node, K key, V value) {
+	protected Node<K, V> delete(Node<K, V> node, K key) {
 		int cmp = key.compareTo(node.key);
-		if (cmp < 0 && value != node.value) {
-			node.left = delete(node.left, key, value);
-		} else if (cmp > 0 && value != node.value) {
-			node.right = delete(node.right, key, value);
-		} else if (cmp == 0 && value == node.value){
+		if (cmp < 0) {
+			node.left = delete(node.left, key);
+		} else if (cmp > 0) {
+			node.right = delete(node.right, key);
+		} else {
 			if (node.left == null) {
 				return node.right;
 			} else if (node.right == null) {

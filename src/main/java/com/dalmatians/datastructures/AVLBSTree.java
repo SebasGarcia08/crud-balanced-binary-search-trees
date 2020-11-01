@@ -1,6 +1,6 @@
 package com.dalmatians.datastructures;
 
-public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> {
+public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> implements BalancedBSTree<K, V>{
 
 	public AVLBSTree() {
 		super();
@@ -14,8 +14,8 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	}
 
 	@Override
-	protected Node<K, V> delete(Node<K, V> node, K key, V value) {
-		Node<K, V> x = super.delete(node, key, value);
+	protected Node<K, V> delete(Node<K, V> node, K key) {
+		Node<K, V> x = super.delete(node, key);
 		x.height = 1 + Math.max(height(x.left), height(x.right));
 		return balance(x);
 	}
