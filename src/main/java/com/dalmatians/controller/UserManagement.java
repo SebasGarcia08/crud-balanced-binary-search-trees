@@ -1,22 +1,27 @@
 package com.dalmatians.controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 
-public class UserManagement {
+public class UserManagement implements Initializable {
 
     @FXML
     private JFXTextField numUsersToGenerate;
 
     @FXML
-    private JFXComboBox<?> searchingCriterion;
+    private JFXComboBox<String> searchingCriterion;
 
     @FXML
     private JFXTextField searchText;
@@ -50,7 +55,19 @@ public class UserManagement {
 
     @FXML
     private ProgressIndicator progressIndicator;
-
+    
+    @FXML
+    private GridPane progressGridpane;
+    
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+    	progressGridpane.setVisible(false);
+    	searchingCriterion.getItems().add("Id");
+    	searchingCriterion.getItems().add("Name");
+    	searchingCriterion.getItems().add("Surname");
+    	searchingCriterion.getItems().add("Full Name");
+	}
+    
     @FXML
     void clearDatabase(ActionEvent event) {
 
@@ -63,6 +80,11 @@ public class UserManagement {
 
     @FXML
     void searchPerson(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void deleteCurrentUser(ActionEvent event) {
 
     }
 

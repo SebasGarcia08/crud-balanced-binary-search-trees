@@ -35,11 +35,11 @@ public class MainMenu implements Initializable {
     @FXML
     private JFXButton exitButton;
     
-	private Pane usersOperationScene;
+	private Pane usersManagementScene;
 
     public MainMenu() {
     	try {
-			this.usersOperationScene = (Pane) FXMLLoader.load(getClass().getResource("/fxml/UserOperations.fxml"));
+			this.usersManagementScene = (Pane) FXMLLoader.load(getClass().getResource("/fxml/UserManagement.fxml"));
 			userOperationsBtn.setStyle("-fx-background-color:grey;");
     	} catch(Exception e) {
     		
@@ -48,7 +48,7 @@ public class MainMenu implements Initializable {
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.parentContainer.getChildren().add(usersOperationScene);
+		this.parentContainer.getChildren().add(usersManagementScene);
 	}
     
     @FXML

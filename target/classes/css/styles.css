@@ -75,6 +75,18 @@
     -fx-border-radius:     0.0 25.0;		
 }
 
+#deleteCurrentUserBtn {
+	-fx-background-color:  transparent;
+	-fx-background-radius: 10.0 10.0 10.0 10.0;
+    -fx-border-radius: 10.0 10.0 10.0 10.0;	
+}
+
+#deleteCurrentUserBtn:hover {
+	-fx-background-color:  #e00d0d;
+	-fx-background-radius: 10.0 10.0 10.0 10.0;
+    -fx-border-radius: 10.0 10.0 10.0 10.0;			
+}
+
 #submitButton{
 	-fx-background-color: #00c6ff;
 	-fx-background-radius: 15.0 15.0 15.0 15.0;
