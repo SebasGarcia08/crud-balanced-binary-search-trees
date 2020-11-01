@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="backgroundAnchorPane" prefHeight="831.0" prefWidth="1251.0" style="-fx-background-color: transparent;" styleClass="background" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenu">
+<AnchorPane fx:id="backgroundAnchorPane" prefHeight="831.0" prefWidth="1251.0" style="-fx-background-color: transparent;" styleClass="background" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dalmatians.controller.MainMenu">
 	<children>
 		<AnchorPane layoutX="-45.0" layoutY="-7.0" prefHeight="711.0" prefWidth="1017.0" styleClass="background" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="-45.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="-7.0">
 			<children>

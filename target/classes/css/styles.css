@@ -81,7 +81,7 @@
     -fx-border-radius: 15.0 15.0 15.0 15.0;
 }
 
-#operationBox{
+.operationBox{
 	-fx-border-radius: 25px;
 	-fx-border-color: #0066b1;
 	-fx-padding: 20px;
