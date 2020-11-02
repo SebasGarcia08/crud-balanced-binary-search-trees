@@ -160,9 +160,9 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		if (x == null)
 			return new Node<>(key, value);
 		int cmp = key.compareTo(x.key);
-		if (cmp < 0 && x.value != value) {
+		if (cmp < 0) {
 			x.left = add(x.left, key, value);
-		} else if (cmp > 0 && x.value != value){
+		} else if (cmp > 0){
 			x.right = add(x.right, key, value);
 		} else {			
 			x.right = add(x.right, key, value);
