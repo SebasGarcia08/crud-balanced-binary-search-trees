@@ -7,9 +7,9 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	}
 
 	@Override
-	public Node<K, V> add(Node<K, V> node, K key, V value) {
-		Node<K, V> x = super.add(root, key, value);
-		x.height = 1 + Math.max(height(node.left), height(node.right));
+	protected Node<K, V> add(Node<K, V> node, K key, V value) {
+		Node<K, V> x = super.add(node, key, value);
+		x.height = 1 + Math.max(height(x.left), height(x.right));
 		return balance(x);
 	}
 
