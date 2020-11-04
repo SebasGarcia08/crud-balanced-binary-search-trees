@@ -15,6 +15,7 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 		avl.add(5, 5);
 		avl.add(6, 6);
 		avl.add(7, 7);
+		avl.add(7, 0);
 		avl.print2D();
 		avl.delete(3);
 		avl.print2D();

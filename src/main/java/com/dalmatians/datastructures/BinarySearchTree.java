@@ -2,18 +2,19 @@ package com.dalmatians.datastructures;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * Implementation of a generic Binary Search Tree
+ * Implementation of a generic Binary Search Tree in which whenever are duplicate keys, values are stored in a list.
  * 
  * @author Christian Gallo Pelaez
  * @author Sebastian Garcia Acosta
  * @param <K,V>, any class that implements the Comparable interface
  */
-public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V> {
+public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<List<V>> {
 	/**
 	 * This class represents the node of the BST.
 	 * 
@@ -35,7 +36,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		protected Node<K, V> right;
 
 		/** V, the data that the Node encapsulates */
-		protected V value;
+		protected List<V> values;
 
 		/** K, the key */
 		protected K key;
@@ -48,7 +49,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		 * @param data, an object of a class K,V that implements Comparable interface
 		 */
 		public Node(K key, V data) {
-			this.value = data;
+			this.values = new LinkedList<>();
+			this.values.add(data);
 			this.left = null;
 			this.right = null;
 			this.parent = null;
@@ -90,7 +92,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		// count
 		for (int i = count; i < space; i++)
 			System.out.print(" ");
-		System.out.print(root.value + "\n");
+		System.out.print(root.values + "\n");
 
 		// Process left child
 		print2DUtil(root.left, space);
@@ -138,9 +140,9 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		return (found != null);
 	}
 
-	public V search(K key) {
+	public List<V> search(K key) {
 		Node<K, V> found = searchNode(key);
-		return (found == null) ? null : found.value;
+		return (found == null) ? null : found.values;
 	}
 
 	/**
@@ -165,7 +167,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		} else if (cmp > 0) {
 			currentNode.right = add(currentNode.right, key, value);
 		} else {
-			currentNode.right = add(currentNode.right, key, value);
+			currentNode.values.add(0, value); // Add duplicate element at the beginning in order to avoid extra iterations
 		}
 		return currentNode;
 	}
@@ -250,8 +252,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		return root == null;
 	}
 
-	public V getRootData() {
-		return this.root.value;
+	public List<V> getRootData() {
+		return this.root.values;
 	}
 
 	public void reset() {
@@ -267,7 +269,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	private void inorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
 			inorder(root.left, list);
-			list.add(root.value);
+			for(V value : root.values)
+				list.add(value);
 			inorder(root.right, list);
 		}
 	}
@@ -280,7 +283,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 
 	private void preorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
-			list.add(root.value);
+			for(V value: root.values)
+				list.add(value);
 			preorder(root.left, list);
 			preorder(root.right, list);
 		}
@@ -296,17 +300,18 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		if (root != null) {
 			postorder(root.left, list);
 			postorder(root.right, list);
-			list.add(root.value);
+			for(V value : root.values)
+				list.add(value);
 		}
 	}
 
 	@Override
-	public Iterator<V> iterator() {
+	public Iterator<List<V>> iterator() {
 		return new InorderIterator();
 	}
 
 	/* Iterator */
-	private class InorderIterator implements Iterator<V> {
+	private class InorderIterator implements Iterator<List<V>> {
 		/** The nodes that are still to be visited. */
 		private Stack<Node<K, V>> stack;
 
@@ -336,11 +341,11 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		/**
 		 * The next element in this iterator; Advance the iterator.
 		 */
-		public V next() {
+		public List<V> next() {
 			Node<K, V> node = stack.peek();
 			stack.pop();
 			pushPathToMin(node.right);
-			return node.value;
+			return node.values;
 		}
 
 		/** (Don't) remove an element from this iterator. */
