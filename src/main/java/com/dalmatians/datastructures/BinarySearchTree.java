@@ -61,7 +61,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	protected Node<K, V> root;
 
 	protected int size;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -137,10 +137,10 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		Node<K, V> found = searchNode(key);
 		return (found != null);
 	}
-	
+
 	public V search(K key) {
-		Node<K,V> found = searchNode(key);
-		return (found == null) ? null: found.value; 
+		Node<K, V> found = searchNode(key);
+		return (found == null) ? null : found.value;
 	}
 
 	/**
@@ -151,32 +151,31 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		if (key == null)
 			throw new IllegalArgumentException("Key cannot be null");
 		else {
-			root = add(root, key, value);			
+			root = add(root, key, value);
 			size++;
 		}
 	}
 
-	protected Node<K, V> add(Node<K, V> x, K key, V value) {
-		if (x == null)
+	protected Node<K, V> add(Node<K, V> currentNode, K key, V value) {
+		if (currentNode == null)
 			return new Node<>(key, value);
-		int cmp = key.compareTo(x.key);
+		int cmp = key.compareTo(currentNode.key);
 		if (cmp < 0) {
-			x.left = add(x.left, key, value);
-		} else if (cmp > 0){
-			x.right = add(x.right, key, value);
-		} else {			
-			x.right = add(x.right, key, value);
+			currentNode.left = add(currentNode.left, key, value);
+		} else if (cmp > 0) {
+			currentNode.right = add(currentNode.right, key, value);
+		} else {
+			currentNode.right = add(currentNode.right, key, value);
 		}
-		return x;
+		return currentNode;
 	}
-	
+
 	public void delete(K key) {
-		if(key == null)  throw new IllegalArgumentException("argument to delete() is null");
-		if(contains(key)) {
-			root = delete(root, key);
-		}
+		if (key == null)
+			throw new IllegalArgumentException("Null key to delete");
+		root = delete(root, key);
 	}
-	
+
 	protected Node<K, V> delete(Node<K, V> node, K key) {
 		int cmp = key.compareTo(node.key);
 		if (cmp < 0) {
@@ -198,23 +197,24 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		}
 		return node;
 	}
-	
+
 	public int size() {
 		return size;
 	}
-	
+
 	public void deleteMin() {
 		if (isEmpty())
 			throw new NoSuchElementException("called deleteMin() with empty symbol table");
 		root = deleteMin(root);
 	}
 
-    protected Node<K,V> deleteMin(Node<K,V> x) {
-        if (x.left == null) return x.right;
-        x.left = deleteMin(x.left);
-        x.height = 1 + Math.max(height(x.left), height(x.right));
-        return x;
-    }
+	protected Node<K, V> deleteMin(Node<K, V> x) {
+		if (x.left == null)
+			return x.right;
+		x.left = deleteMin(x.left);
+		x.height = 1 + Math.max(height(x.left), height(x.right));
+		return x;
+	}
 
 	public Node<K, V> getMaximum(Node<K, V> localRoot) {
 		Node<K, V> currentNode = localRoot;
@@ -229,31 +229,31 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 			currentNode = currentNode.left;
 		return currentNode;
 	}
-    
-    /**
-     * Returns the height of the internal AVL tree. It is assumed that the
-     * height of an empty tree is -1 and the height of a tree with just one node
-     * is 0.
-     * 
-     * @return the height of the internal AVL tree
-     */
-    public int height() {
-        return height(root);
-    }
-    
-    protected int height(Node<K,V> x) {
-        if (x == null) return -1;
-        return x.height;
-    }
-	
+
+	/**
+	 * Returns the height of the internal AVL tree. It is assumed that the height of
+	 * an empty tree is -1 and the height of a tree with just one node is 0.
+	 * 
+	 * @return the height of the internal AVL tree
+	 */
+	public int height() {
+		return height(root);
+	}
+
+	protected int height(Node<K, V> x) {
+		if (x == null)
+			return -1;
+		return x.height;
+	}
+
 	public boolean isEmpty() {
 		return root == null;
 	}
-	
+
 	public V getRootData() {
 		return this.root.value;
 	}
-	
+
 	public void reset() {
 		this.root = null;
 	}

@@ -5,6 +5,20 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	public AVLBSTree() {
 		super();
 	}
+	
+	public static void main(String[] args) {
+		AVLBSTree<Integer, Integer> avl = new AVLBSTree<>();
+		avl.add(1, 1);
+		avl.add(2, 2);
+		avl.add(3, 3);
+		avl.add(4, 4);
+		avl.add(5, 5);
+		avl.add(6, 6);
+		avl.add(7, 7);
+		avl.print2D();
+		avl.delete(3);
+		avl.print2D();
+	}
 
 	@Override
 	protected Node<K, V> add(Node<K, V> node, K key, V value) {
@@ -16,8 +30,11 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	@Override
 	protected Node<K, V> delete(Node<K, V> node, K key) {
 		Node<K, V> x = super.delete(node, key);
-		x.height = 1 + Math.max(height(x.left), height(x.right));
-		return balance(x);
+		if(x != null) { // leaf node case
+			x.height = 1 + Math.max(height(x.left), height(x.right));						
+			return balance(x);
+		} else
+			return null;
 	}
 
 	/**
