@@ -1,8 +1,9 @@
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/ui/Main.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/model/Database.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/datastructures/BinarySearchTree.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/model/Person.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/controller/MainMenu.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/datastructures/AVLBSTree.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/datastructures/RedBlackBSTree.java
-/home/sebastian/eclipse-workspace/crud-balanced-binary-search-trees/src/main/java/com/dalmatians/controller/UserManagement.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\datastructures\BinarySearchTree.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\controller\MainMenu.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\datastructures\AVLBSTree.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\datastructures\BalancedBSTree.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\datastructures\RedBlackBSTree.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\model\Database.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\model\Person.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\ui\Main.java
+C:\Users\juanf\eclipse-workspace\3er semestre\crud-balanced-binary-search-trees\src\main\java\com\dalmatians\controller\UserManagement.java
