@@ -8,7 +8,8 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * Implementation of a generic Binary Search Tree in which whenever are duplicate keys, values are stored in a list.
+ * Implementation of a generic Binary Search Tree in which whenever are
+ * duplicate keys, values are stored in a list.
  * 
  * @author Christian Gallo Pelaez
  * @author Sebastian Garcia Acosta
@@ -167,7 +168,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		} else if (cmp > 0) {
 			currentNode.right = add(currentNode.right, key, value);
 		} else {
-			currentNode.values.add(0, value); // Add duplicate element at the beginning in order to avoid extra iterations
+			currentNode.values.add(0, value); // Add duplicate element at the beginning in order to avoid extra
+												// iterations
 		}
 		return currentNode;
 	}
@@ -269,7 +271,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 	private void inorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
 			inorder(root.left, list);
-			for(V value : root.values)
+			for (V value : root.values)
 				list.add(value);
 			inorder(root.right, list);
 		}
@@ -283,7 +285,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 
 	private void preorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
-			for(V value: root.values)
+			for (V value : root.values)
 				list.add(value);
 			preorder(root.left, list);
 			preorder(root.right, list);
@@ -300,7 +302,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		if (root != null) {
 			postorder(root.left, list);
 			postorder(root.right, list);
-			for(V value : root.values)
+			for (V value : root.values)
 				list.add(value);
 		}
 	}

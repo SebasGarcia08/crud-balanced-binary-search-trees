@@ -3,6 +3,7 @@ package com.dalmatians.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
@@ -48,6 +49,12 @@ public class UserManagement implements Initializable {
     private JFXTextField nationalityTxt;
 
     @FXML
+    private JFXButton deleteCurrentUserBtn;
+
+    @FXML
+    private GridPane progressGridpane;
+
+    @FXML
     private JFXProgressBar operationsProgressBar;
 
     @FXML
@@ -56,9 +63,6 @@ public class UserManagement implements Initializable {
     @FXML
     private ProgressIndicator progressIndicator;
     
-    @FXML
-    private GridPane progressGridpane;
-    
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
     	progressGridpane.setVisible(false);
@@ -66,6 +70,7 @@ public class UserManagement implements Initializable {
     	searchingCriterion.getItems().add("Name");
     	searchingCriterion.getItems().add("Surname");
     	searchingCriterion.getItems().add("Full Name");
+    	
 	}
     
     @FXML
@@ -85,6 +90,11 @@ public class UserManagement implements Initializable {
     
     @FXML
     void deleteCurrentUser(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void addUsers(ActionEvent event) {
 
     }
 

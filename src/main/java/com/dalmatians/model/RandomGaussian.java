@@ -14,7 +14,7 @@ public class RandomGaussian {
 		random = new Random();
 	}
 	
-	public double getGaussian() {
+	public double generate() {
 		return mean + random.nextGaussian() * stddev;
 	}
 	
