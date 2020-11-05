@@ -77,6 +77,11 @@
                                                 <Insets right="30.0" />
                                              </HBox.margin>
                                           </JFXButton>
+                                          <JFXButton id="submitButton" buttonType="RAISED" onAction="#addUsers" prefHeight="45.0" prefWidth="113.0" text="Add" textFill="WHITE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </JFXButton>
                                        </children>
                                     </HBox>
                                  </children>

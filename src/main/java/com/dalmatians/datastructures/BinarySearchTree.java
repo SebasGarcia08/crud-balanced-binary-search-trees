@@ -2,18 +2,20 @@ package com.dalmatians.datastructures;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * Implementation of a generic Binary Search Tree
+ * Implementation of a generic Binary Search Tree in which whenever are
+ * duplicate keys, values are stored in a list.
  * 
  * @author Christian Gallo Pelaez
  * @author Sebastian Garcia Acosta
  * @param <K,V>, any class that implements the Comparable interface
  */
-public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V> {
+public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<List<V>> {
 	/**
 	 * This class represents the node of the BST.
 	 * 
@@ -35,7 +37,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		protected Node<K, V> right;
 
 		/** V, the data that the Node encapsulates */
-		protected V value;
+		protected List<V> values;
 
 		/** K, the key */
 		protected K key;
@@ -48,7 +50,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		 * @param data, an object of a class K,V that implements Comparable interface
 		 */
 		public Node(K key, V data) {
-			this.value = data;
+			this.values = new LinkedList<>();
+			this.values.add(data);
 			this.left = null;
 			this.right = null;
 			this.parent = null;
@@ -61,7 +64,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	protected Node<K, V> root;
 
 	protected int size;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -90,7 +93,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		// count
 		for (int i = count; i < space; i++)
 			System.out.print(" ");
-		System.out.print(root.value + "\n");
+		System.out.print(root.values + "\n");
 
 		// Process left child
 		print2DUtil(root.left, space);
@@ -102,6 +105,33 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		print2DUtil(root, 0);
 	}
 
+	public String string2DUtil(Node<K, V> root, int space, String s) {
+		int count = 5;
+		// Base case
+		if (root == null)
+			return "";
+
+		// Increase distance between levels
+		space += count;
+
+		// Process right child first
+		print2DUtil(root.right, space);
+
+		// Print current node after space
+		// count
+		for (int i = count; i < space; i++)
+			s += " ";
+		s += root.values + "\n";
+
+		// Process left child
+		return string2DUtil(root.left, space, s);
+	}
+
+	// Wrapper over print2DUtil()
+	public String string2D() {
+		// Pass initial space count as 0
+		return string2DUtil(root, 0, "");
+	}
 	/**
 	 * Searches an element in the tree
 	 * 
@@ -137,10 +167,10 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		Node<K, V> found = searchNode(key);
 		return (found != null);
 	}
-	
-	public V search(K key) {
-		Node<K,V> found = searchNode(key);
-		return (found == null) ? null: found.value; 
+
+	public List<V> search(K key) {
+		Node<K, V> found = searchNode(key);
+		return (found == null) ? null : found.values;
 	}
 
 	/**
@@ -151,32 +181,32 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		if (key == null)
 			throw new IllegalArgumentException("Key cannot be null");
 		else {
-			root = add(root, key, value);			
+			root = add(root, key, value);
 			size++;
 		}
 	}
 
-	protected Node<K, V> add(Node<K, V> x, K key, V value) {
-		if (x == null)
+	protected Node<K, V> add(Node<K, V> currentNode, K key, V value) {
+		if (currentNode == null)
 			return new Node<>(key, value);
-		int cmp = key.compareTo(x.key);
+		int cmp = key.compareTo(currentNode.key);
 		if (cmp < 0) {
-			x.left = add(x.left, key, value);
-		} else if (cmp > 0){
-			x.right = add(x.right, key, value);
-		} else {			
-			x.right = add(x.right, key, value);
+			currentNode.left = add(currentNode.left, key, value);
+		} else if (cmp > 0) {
+			currentNode.right = add(currentNode.right, key, value);
+		} else {
+			currentNode.values.add(0, value); // Add duplicate element at the beginning in order to avoid extra
+												// iterations
 		}
-		return x;
+		return currentNode;
 	}
-	
+
 	public void delete(K key) {
-		if(key == null)  throw new IllegalArgumentException("argument to delete() is null");
-		if(contains(key)) {
-			root = delete(root, key);
-		}
+		if (key == null)
+			throw new IllegalArgumentException("Null key to delete");
+		root = delete(root, key);
 	}
-	
+
 	protected Node<K, V> delete(Node<K, V> node, K key) {
 		int cmp = key.compareTo(node.key);
 		if (cmp < 0) {
@@ -198,23 +228,24 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		}
 		return node;
 	}
-	
+
 	public int size() {
 		return size;
 	}
-	
+
 	public void deleteMin() {
 		if (isEmpty())
 			throw new NoSuchElementException("called deleteMin() with empty symbol table");
 		root = deleteMin(root);
 	}
 
-    protected Node<K,V> deleteMin(Node<K,V> x) {
-        if (x.left == null) return x.right;
-        x.left = deleteMin(x.left);
-        x.height = 1 + Math.max(height(x.left), height(x.right));
-        return x;
-    }
+	protected Node<K, V> deleteMin(Node<K, V> x) {
+		if (x.left == null)
+			return x.right;
+		x.left = deleteMin(x.left);
+		x.height = 1 + Math.max(height(x.left), height(x.right));
+		return x;
+	}
 
 	public Node<K, V> getMaximum(Node<K, V> localRoot) {
 		Node<K, V> currentNode = localRoot;
@@ -229,31 +260,31 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 			currentNode = currentNode.left;
 		return currentNode;
 	}
-    
-    /**
-     * Returns the height of the internal AVL tree. It is assumed that the
-     * height of an empty tree is -1 and the height of a tree with just one node
-     * is 0.
-     * 
-     * @return the height of the internal AVL tree
-     */
-    public int height() {
-        return height(root);
-    }
-    
-    protected int height(Node<K,V> x) {
-        if (x == null) return -1;
-        return x.height;
-    }
-	
+
+	/**
+	 * Returns the height of the internal AVL tree. It is assumed that the height of
+	 * an empty tree is -1 and the height of a tree with just one node is 0.
+	 * 
+	 * @return the height of the internal AVL tree
+	 */
+	public int height() {
+		return height(root);
+	}
+
+	protected int height(Node<K, V> x) {
+		if (x == null)
+			return -1;
+		return x.height;
+	}
+
 	public boolean isEmpty() {
 		return root == null;
 	}
-	
-	public V getRootData() {
-		return this.root.value;
+
+	public List<V> getRootData() {
+		return this.root.values;
 	}
-	
+
 	public void reset() {
 		this.root = null;
 	}
@@ -267,7 +298,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 	private void inorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
 			inorder(root.left, list);
-			list.add(root.value);
+			for (V value : root.values)
+				list.add(value);
 			inorder(root.right, list);
 		}
 	}
@@ -280,7 +312,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 
 	private void preorder(Node<K, V> root, List<V> list) {
 		if (root != null) {
-			list.add(root.value);
+			for (V value : root.values)
+				list.add(value);
 			preorder(root.left, list);
 			preorder(root.right, list);
 		}
@@ -296,17 +329,18 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		if (root != null) {
 			postorder(root.left, list);
 			postorder(root.right, list);
-			list.add(root.value);
+			for (V value : root.values)
+				list.add(value);
 		}
 	}
 
 	@Override
-	public Iterator<V> iterator() {
+	public Iterator<List<V>> iterator() {
 		return new InorderIterator();
 	}
 
 	/* Iterator */
-	private class InorderIterator implements Iterator<V> {
+	private class InorderIterator implements Iterator<List<V>> {
 		/** The nodes that are still to be visited. */
 		private Stack<Node<K, V>> stack;
 
@@ -336,11 +370,11 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<V>
 		/**
 		 * The next element in this iterator; Advance the iterator.
 		 */
-		public V next() {
+		public List<V> next() {
 			Node<K, V> node = stack.peek();
 			stack.pop();
 			pushPathToMin(node.right);
-			return node.value;
+			return node.values;
 		}
 
 		/** (Don't) remove an element from this iterator. */

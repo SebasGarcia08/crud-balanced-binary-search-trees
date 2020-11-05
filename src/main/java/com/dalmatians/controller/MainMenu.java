@@ -40,15 +40,15 @@ public class MainMenu implements Initializable {
     public MainMenu() {
     	try {
 			this.usersManagementScene = (Pane) FXMLLoader.load(getClass().getResource("/fxml/UserManagement.fxml"));
-			userOperationsBtn.setStyle("-fx-background-color:grey;");
     	} catch(Exception e) {
-    		
+    		e.printStackTrace();
     	}
     }
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.parentContainer.getChildren().add(usersManagementScene);
+		userOperationsBtn.setStyle("-fx-background-color:grey;");
 	}
     
     @FXML
