@@ -101,4 +101,9 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 		y.height = 1 + Math.max(height(y.left), height(y.right));
 		return y;
 	}
+	
+	@Override
+	public String toString() {
+		return string2D();
+	}
 }

@@ -105,6 +105,33 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		print2DUtil(root, 0);
 	}
 
+	public String string2DUtil(Node<K, V> root, int space, String s) {
+		int count = 5;
+		// Base case
+		if (root == null)
+			return "";
+
+		// Increase distance between levels
+		space += count;
+
+		// Process right child first
+		print2DUtil(root.right, space);
+
+		// Print current node after space
+		// count
+		for (int i = count; i < space; i++)
+			s += " ";
+		s += root.values + "\n";
+
+		// Process left child
+		return string2DUtil(root.left, space, s);
+	}
+
+	// Wrapper over print2DUtil()
+	public String string2D() {
+		// Pass initial space count as 0
+		return string2DUtil(root, 0, "");
+	}
 	/**
 	 * Searches an element in the tree
 	 * 

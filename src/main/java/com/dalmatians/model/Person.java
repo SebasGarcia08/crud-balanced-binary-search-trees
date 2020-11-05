@@ -8,7 +8,7 @@ public class Person {
 		M, F
 	}
 
-	private String id;
+	private int id;
 	private String name;
 	private String lastName;
 	private SEX sex;
@@ -16,7 +16,7 @@ public class Person {
 	private LocalDate birthdate;
 	private String nationality;
 	
-	public Person(String id, String name, String lastName, SEX sex, double height, LocalDate birthdate,
+	public Person(int id, String name, String lastName, SEX sex, double height, LocalDate birthdate,
 			String nationality) {
 		super();
 		this.id = id;
@@ -31,7 +31,7 @@ public class Person {
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -45,7 +45,7 @@ public class Person {
 	/**
 	 * @return the lastName
 	 */
-	public String getLastName() {
+	public String getSurname() {
 		return lastName;
 	}
 
@@ -80,7 +80,7 @@ public class Person {
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -94,7 +94,7 @@ public class Person {
 	/**
 	 * @param lastName the lastName to set
 	 */
-	public void setLastName(String lastName) {
+	public void setSurname(String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -124,6 +124,12 @@ public class Person {
 	 */
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + ", lastName=" + lastName + ", sex=" + sex + ", height=" + height
+				+ ", birthdate=" + birthdate + ", nationality=" + nationality + "]";
 	}
 	
 }
