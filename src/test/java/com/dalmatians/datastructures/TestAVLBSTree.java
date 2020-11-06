@@ -6,9 +6,9 @@ import java.util.*;
 
 import org.junit.Test;
 
-public class TestAVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V>{
+public class TestAVLBSTree {
 	
-	AVLBSTree<Integer, Integer> tree;
+	private AVLBSTree<Integer, Integer> tree;
 	
 	public void emptySetup() {
 		tree = new AVLBSTree<Integer, Integer>();
@@ -27,12 +27,12 @@ public class TestAVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<
 	public void testAddEmpty() {
 		emptySetup();
 		tree.add(1, 1);
-		assertTrue(tree.root.value == 1);
+		assertTrue(tree.root.values.get(0) == 1);
 		tree.add(2, 2);
-		assertTrue(tree.root.right.value == 2);
+		assertTrue(tree.root.right.values.get(0) == 2);
 		tree.add(3, 3);
-		assertTrue(tree.root.value == 2);
-		assertTrue((tree.root.left.value == 1) && (tree.root.right.value == 3));
+		assertTrue(tree.root.values.get(0) == 2);
+		assertTrue((tree.root.left.values.get(0) == 1) && (tree.root.right.values.get(0) == 3));
 	}
 	
 	@Test
