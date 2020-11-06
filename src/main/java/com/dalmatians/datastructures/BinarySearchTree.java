@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
+import com.dalmatians.datastructures.BinarySearchTree.Node;
+
 /**
  * Implementation of a generic Binary Search Tree in which whenever are
  * duplicate keys, values are stored in a list.
@@ -334,6 +336,36 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		}
 	}
 
+	/**
+	 * Rotates the given subtree to the right.
+	 * 
+	 * @param x the subtree
+	 * @return the right rotated subtree
+	 */
+	protected Node<K, V> rotateRight(Node<K, V> x) {
+		Node<K, V> y = x.left;
+		x.left = y.right;
+		y.right = x;
+		x.height = 1 + Math.max(height(x.left), height(x.right));
+		y.height = 1 + Math.max(height(y.left), height(y.right));
+		return y;
+	}
+
+	/**
+	 * Rotates the given subtree to the left.
+	 * 
+	 * @param x the subtree
+	 * @return the left rotated subtree
+	 */
+	protected Node<K, V> rotateLeft(Node<K, V> x) {
+		Node<K, V> y = x.right;
+		x.right = y.left;
+		y.left = x;
+		x.height = 1 + Math.max(height(x.left), height(x.right));
+		y.height = 1 + Math.max(height(y.left), height(y.right));
+		return y;
+	}
+	
 	@Override
 	public Iterator<List<V>> iterator() {
 		return new InorderIterator();

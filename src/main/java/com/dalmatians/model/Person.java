@@ -10,7 +10,7 @@ public class Person {
 
 	private int id;
 	private String name;
-	private String lastName;
+	private String surname;
 	private SEX sex;
 	private double height;
 	private LocalDate birthdate;
@@ -21,7 +21,7 @@ public class Person {
 		super();
 		this.id = id;
 		this.name = name;
-		this.lastName = lastName;
+		this.surname = lastName;
 		this.sex = sex;
 		this.height = height;
 		this.birthdate = birthdate;
@@ -46,7 +46,7 @@ public class Person {
 	 * @return the lastName
 	 */
 	public String getSurname() {
-		return lastName;
+		return surname;
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class Person {
 	 * @param lastName the lastName to set
 	 */
 	public void setSurname(String lastName) {
-		this.lastName = lastName;
+		this.surname = lastName;
 	}
 
 	/**
@@ -125,10 +125,14 @@ public class Person {
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
 	}
+	
+	public String getFullName() {
+		return name + " " + surname;
+	}
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", name=" + name + ", lastName=" + lastName + ", sex=" + sex + ", height=" + height
+		return "Person [id=" + id + ", name=" + name + ", lastName=" + surname + ", sex=" + sex + ", height=" + height
 				+ ", birthdate=" + birthdate + ", nationality=" + nationality + "]";
 	}
 	

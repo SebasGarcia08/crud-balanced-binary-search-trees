@@ -6,12 +6,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.dalmatians.model.Database;
+import com.dalmatians.model.Person;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -95,12 +95,15 @@ public class UserManagement implements Initializable {
 			int n = Integer.parseInt(numUsersToGenerate.getText());
 			progressMessage.setText("Generating " + n + " persons...");
 			db.preapteForGenerate(n);
+			
 			for (int i = 0; i < n; i++) {
 				db.getPeople()[i] = db.createRandomPerson(i);
+
 				final double progress = (double) i / (double) n;
 				operationsProgressBar.setProgress(progress);
 				progressIndicator.setProgress(progress);
 			}
+			
 //			Platform.runLater(() -> progressGridpane.setVisible(false));
 		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -119,7 +122,9 @@ public class UserManagement implements Initializable {
 
 	@FXML
 	void addUsers(ActionEvent event) {
-
+		for(Person p : db.getPeople()) {
+			db.getIdTree().add(p.getId(), p);
+			db.getFullnameTree().add(p.getFullName(), p);
+		}
 	}
-
 }

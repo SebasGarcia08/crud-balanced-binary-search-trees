@@ -71,36 +71,6 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	private int balanceFactor(Node<K, V> x) {
 		return height(x.left) - height(x.right);
 	}
-
-	/**
-	 * Rotates the given subtree to the right.
-	 * 
-	 * @param x the subtree
-	 * @return the right rotated subtree
-	 */
-	private Node<K, V> rotateRight(Node<K, V> x) {
-		Node<K, V> y = x.left;
-		x.left = y.right;
-		y.right = x;
-		x.height = 1 + Math.max(height(x.left), height(x.right));
-		y.height = 1 + Math.max(height(y.left), height(y.right));
-		return y;
-	}
-
-	/**
-	 * Rotates the given subtree to the left.
-	 * 
-	 * @param x the subtree
-	 * @return the left rotated subtree
-	 */
-	private Node<K, V> rotateLeft(Node<K, V> x) {
-		Node<K, V> y = x.right;
-		x.right = y.left;
-		y.left = x;
-		x.height = 1 + Math.max(height(x.left), height(x.right));
-		y.height = 1 + Math.max(height(y.left), height(y.right));
-		return y;
-	}
 	
 	@Override
 	public String toString() {

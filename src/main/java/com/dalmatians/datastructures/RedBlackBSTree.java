@@ -198,7 +198,7 @@ public class RedBlackBSTree<K extends Comparable<K>, V> {
 			blackHeight++;
 		}
 
-		// Step 3: If color of x’s parent is not BLACK or x is not root
+		// Step 3: If color of xs parent is not BLACK or x is not root
 		if (x.parent != null && x.parent.color == true || x != root) { // TODO RE CHECK EVALUATION
 			solveViolation(x);
 		}
@@ -237,7 +237,7 @@ public class RedBlackBSTree<K extends Comparable<K>, V> {
 	}
 
 	private void solveViolation(NodeRB<K, V> x) {
-		// Case 1: If x’s uncle is RED (Grand parent must have been black from property
+		// Case 1: If x's uncle is RED (Grand parent must have been black from property
 		// 4)
 		NodeRB<K, V> uncle = x.getUncle();
 		if (uncle != null && uncle.color == true) {
@@ -249,13 +249,12 @@ public class RedBlackBSTree<K extends Comparable<K>, V> {
 			// Step 1.2 color of grand parent as RED.
 			x.getGrandParent().color = true;
 
-			// Step 1.3 Change x = x’s grandparent, repeat steps 2 and 3 for new x.
+			// Step 1.3 Change x = x's grandparent, repeat steps 2 and 3 for new x.
 			balanceRBTree(x.getGrandParent());
 
-			// Case 2: If x’s uncle is BLACK, then there can be four configurations for x,
-			// x’s parent (p) and x’s grandparent (g)
+			// Case 2: If x's uncle is BLACK, then there can be four configurations for x,
+			// x's parent (p) and x's grandparent (g)
 		} else {
-			// TODO
 
 			// i) Left Left Case (p is left child of g and x is left child of p)
 			if (x.parent.isLeftChild() && x.isLeftChild()) { // TODO

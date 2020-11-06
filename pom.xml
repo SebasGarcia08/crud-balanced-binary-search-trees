@@ -60,7 +60,7 @@
 				<executions>
 					<execution>
 						<phase>package</phase>
-						<goals>
+						<goals> 
 							<goal>single</goal>
 						</goals>
 					</execution>

@@ -56,13 +56,9 @@ public class Database implements Serializable {
 	private Person[] people;
 	
 	private BalancedBSTree<Integer, Person> idTree;
-	
-	private BalancedBSTree<String, Person> nameTree;
-	
+		
 	private BalancedBSTree<String, Person> fullnameTree;
-	
-	private BalancedBSTree<String, Person> surnameTree;
-	
+		
 	private RandomGaussian femaleHeightsGenerator;
 	
 	private RandomGaussian maleHeightsGenerator;
@@ -79,9 +75,7 @@ public class Database implements Serializable {
 	
 	public Database() {
 		idTree = new AVLBSTree<>();
-		nameTree = new AVLBSTree<>();
 		fullnameTree = new AVLBSTree<>();
-		surnameTree = new AVLBSTree<>();
 		femaleHeightsGenerator = new RandomGaussian(1.65, 0.05);
 		maleHeightsGenerator = new RandomGaussian(1.72, 0.05);
 		uniformGenerator = new Random(); 
@@ -182,7 +176,7 @@ public class Database implements Serializable {
 	}
 
 	public void save(String path) {
-
+		//TODO Implement serialization
 	}
 
 	public Person createRandomPerson(int id) {
@@ -215,9 +209,7 @@ public class Database implements Serializable {
 
 	public void delete(Person p) {
 		idTree.delete(p.getId());
-		nameTree.delete(p.getName());
-		fullnameTree.delete(p.getName() + p.getSurname());
-		surnameTree.delete(p.getSurname());
+		fullnameTree.delete(p.getName() + " " + p.getSurname());
 	}
 
 	public <T> void update(Person p, EDITABLE_ATTRIBUTE attr, T newValue) {
@@ -240,7 +232,7 @@ public class Database implements Serializable {
 			p.setBirthdate((LocalDate) newValue);
 			break;
 		case HEIGHT:
-			p.setHeight((double) newValue);
+			p.setHeight((Double) newValue);
 			break;
 		default:
 			break;
@@ -311,41 +303,6 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * @return the nameTree
-	 */
-	public BalancedBSTree<String, Person> getNameTree() {
-		return nameTree;
-	}
-
-	/**
-	 * @return the fullnameTree
-	 */
-	public BalancedBSTree<String, Person> getFullnameTree() {
-		return fullnameTree;
-	}
-
-	/**
-	 * @return the surnameTree
-	 */
-	public BalancedBSTree<String, Person> getSurnameTree() {
-		return surnameTree;
-	}
-
-	/**
-	 * @param idTree the idTree to set
-	 */
-	public void setIdTree(BalancedBSTree<Integer, Person> idTree) {
-		this.idTree = idTree;
-	}
-
-	/**
-	 * @param nameTree the nameTree to set
-	 */
-	public void setNameTree(BalancedBSTree<String, Person> nameTree) {
-		this.nameTree = nameTree;
-	}
-
-	/**
 	 * @param fullnameTree the fullnameTree to set
 	 */
 	public void setFullnameTree(BalancedBSTree<String, Person> fullnameTree) {
@@ -353,17 +310,17 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * @param surnameTree the surnameTree to set
-	 */
-	public void setSurnameTree(BalancedBSTree<String, Person> surnameTree) {
-		this.surnameTree = surnameTree;
-	}
-
-	/**
 	 * @return the people
 	 */
 	public Person[] getPeople() {
 		return people;
+	}
+
+	/**
+	 * @return the fullnameTree
+	 */
+	public BalancedBSTree<String, Person> getFullnameTree() {
+		return fullnameTree;
 	}
 
 	/**
