@@ -93,7 +93,7 @@ public class UserManagement implements Initializable {
 		try {
 			progressGridpane.setVisible(true);
 			int n = Integer.parseInt(numUsersToGenerate.getText());
-			progressMessage.setText("Adding " + n + " persons");
+			progressMessage.setText("Generating " + n + " persons...");
 			db.preapteForGenerate(n);
 			for (int i = 0; i < n; i++) {
 				db.getPeople()[i] = db.createRandomPerson(i);
