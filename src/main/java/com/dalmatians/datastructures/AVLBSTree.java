@@ -68,7 +68,7 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	 * @param x the subtree
 	 * @return the balance factor of the subtree
 	 */
-	private int balanceFactor(Node<K, V> x) {
+	protected int balanceFactor(Node<K, V> x) {
 		return height(x.left) - height(x.right);
 	}
 	
