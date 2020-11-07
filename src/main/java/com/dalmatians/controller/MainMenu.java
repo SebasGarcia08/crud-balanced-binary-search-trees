@@ -37,9 +37,15 @@ public class MainMenu implements Initializable {
     
 	private Pane usersManagementScene;
 
+	private UserManagement userManagementController;
+	
     public MainMenu() {
     	try {
-			this.usersManagementScene = (Pane) FXMLLoader.load(getClass().getResource("/fxml/UserManagement.fxml"));
+//			this.usersManagementScene = (Pane) FXMLLoader.load(getClass().getResource("/fxml/UserManagement.fxml"));
+    		FXMLLoader userManagementLoader = new FXMLLoader();
+			userManagementLoader.setLocation(getClass().getResource("/fxml/UserManagement.fxml"));
+			this.usersManagementScene = userManagementLoader.load();
+			this.userManagementController = (UserManagement) userManagementLoader.getController();
     	} catch(Exception e) {
     		e.printStackTrace();
     	}

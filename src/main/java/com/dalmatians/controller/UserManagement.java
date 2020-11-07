@@ -1,15 +1,10 @@
 package com.dalmatians.controller;
 
-import java.awt.event.InputMethodEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,10 +31,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -213,8 +205,6 @@ public class UserManagement implements Initializable {
 			});
 			visualThread.start();
 
-//			visualThread.join();-
-
 		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -258,12 +248,10 @@ public class UserManagement implements Initializable {
 
 			getUserImage();
 
-		} else {
-			System.out.println(found);
-			System.out.println(db.getFullnameTree());
-		}
+		} 
 	}
-
+	
+// Bonus
 	private void getUserImage() {
 
 		BufferedImage image = null;
@@ -308,8 +296,6 @@ public class UserManagement implements Initializable {
 	}
 
 	public void updateNames() {
-		// TODO
-		// Eliminar del arbol de nombres y apellidos y volver a agregar a la persona
 
 		BalancedBSTree<String, Person> surnameTree = db.getSurnameTree();
 		BalancedBSTree<String, Person> fullnameTree = db.getFullnameTree();
@@ -341,28 +327,23 @@ public class UserManagement implements Initializable {
 			personsSurName.remove(0);
 			surnameTree.delete(currentPerson.getSurname());
 		}
-		
-		
+
 		currentPerson.setName(nameTxt.getText());
 		currentPerson.setSurname(lastNameTxt.getText());
-		
+
 		fullnameTree.add(currentPerson.getFullName(), currentPerson);
 		surnameTree.add(currentPerson.getSurname(), currentPerson);
-		
-		System.out.println("Actualizó");
-		
+
 	}
-	
+
 	@FXML
 	void updateName(KeyEvent event) {
-		
+
 		System.out.println("Pre");
 		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
 			try {
-				
-				System.out.println("Entro Update Name");
+
 				updateNames();
-				
 
 				// Dejen esto si no logran terminarlo
 				// surnameTree.delete(currentPerson.getSurname());
@@ -373,18 +354,14 @@ public class UserManagement implements Initializable {
 			}
 		}
 	}
-	
-	
-	
+
 	@FXML
 	void updateLastName(KeyEvent event) {
 		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
 			try {
-				
+
 				updateNames();
-				
-				// TODO
-				// Eliminar del arbol de nombres y apellidos y volver a agregar a la persona
+
 			} catch (Exception e) {
 
 			}
@@ -476,15 +453,6 @@ public class UserManagement implements Initializable {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
-//		db.addPeopleToTrees();
-	}
-
-	public void showProgressPane() {
-		progressGridpane.setVisible(true);
-	}
-
-	public void hideProgressPane() {
-		progressGridpane.setVisible(false);
 	}
 
 	public void setProgressMessage(String msg) {
