@@ -179,7 +179,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                          <children>
-                                                            <JFXTextField fx:id="nameTxt" focusColor="WHITE" prefHeight="26.0" prefWidth="182.0" unFocusColor="WHITE" />
+                                                            <JFXTextField fx:id="nameTxt" focusColor="WHITE" onKeyReleased="#updateName" prefHeight="26.0" prefWidth="182.0" unFocusColor="WHITE" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
@@ -189,7 +189,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                          <children>
-                                                            <JFXTextField fx:id="lastNameTxt" focusColor="WHITE" prefHeight="26.0" prefWidth="183.0" unFocusColor="WHITE" />
+                                                            <JFXTextField fx:id="lastNameTxt" focusColor="WHITE" onKeyReleased="#updateLastName" prefHeight="26.0" prefWidth="183.0" unFocusColor="WHITE" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
@@ -199,7 +199,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                          <children>
-                                                            <JFXDatePicker fx:id="birthDatePicker" defaultColor="#00c6ff" />
+                                                            <JFXDatePicker fx:id="birthDatePicker" defaultColor="#00c6ff" onKeyReleased="#updateBirthday" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="103.0" GridPane.rowIndex="6">
@@ -209,7 +209,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                          <children>
-                                                            <JFXTextField fx:id="heightTxt" focusColor="WHITE" prefHeight="26.0" prefWidth="187.0" unFocusColor="WHITE" />
+                                                            <JFXTextField fx:id="heightTxt" focusColor="WHITE" onKeyReleased="#updateHeight" prefHeight="26.0" prefWidth="187.0" unFocusColor="WHITE" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.rowIndex="7">
@@ -219,7 +219,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                                          <children>
-                                                            <JFXTextField fx:id="sexTxt" focusColor="WHITE" labelFloat="true" prefHeight="26.0" prefWidth="187.0" unFocusColor="WHITE" />
+                                                            <JFXTextField fx:id="sexTxt" focusColor="WHITE" labelFloat="true" onKeyPressed="#updateSex" prefHeight="26.0" prefWidth="187.0" unFocusColor="WHITE" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
@@ -229,7 +229,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                          <children>
-                                                            <JFXTextField fx:id="nationalityTxt" focusColor="WHITE" prefHeight="26.0" prefWidth="182.0" unFocusColor="WHITE" />
+                                                            <JFXTextField fx:id="nationalityTxt" focusColor="WHITE" onKeyReleased="#updateNationality" prefHeight="26.0" prefWidth="182.0" unFocusColor="WHITE" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER" prefHeight="76.0" prefWidth="292.0" GridPane.columnSpan="3">

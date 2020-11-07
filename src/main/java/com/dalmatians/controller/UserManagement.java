@@ -1,14 +1,21 @@
 package com.dalmatians.controller;
 
+import java.awt.event.InputMethodEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
 
 import org.controlsfx.control.textfield.TextFields;
 
@@ -22,12 +29,17 @@ import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
@@ -93,9 +105,9 @@ public class UserManagement implements Initializable {
 	private ProgressIndicator progressIndicator;
 
 	private Database db;
-	
+
 	Person currentPerson;
-	
+
 	private RandomPersonGenerator randomPersonGenerator;
 
 	public UserManagement() {
@@ -147,8 +159,6 @@ public class UserManagement implements Initializable {
 			for (Person p : values)
 				options.add(p.getFullName() + "");
 		}
-
-		System.out.println(values);
 
 		TextFields.bindAutoCompletion(searchText, options);
 	}
@@ -244,20 +254,83 @@ public class UserManagement implements Initializable {
 			birthDatePicker.setValue(person.getBirthdate());
 			heightTxt.setText(person.getHeight() + "");
 			sexTxt.setText(person.getSex().toString());
+
+			getUserImage(); 
+
 		} else {
 			System.out.println(found);
 			System.out.println(db.getFullnameTree());
 		}
 	}
 
+	private void getUserImage() {
+
+		BufferedImage image = null;
+		try {
+
+			URL url = new URL("https://thispersondoesnotexist.com/image");
+			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection(); 
+	    	httpcon.addRequestProperty("User-Agent", ""); 
+	    	image = ImageIO.read(httpcon.getInputStream());
+			userImage.setImage(SwingFXUtils.toFXImage(image, null));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	void updateBirthday(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			//TODO
+		}
+	}
+
+	@FXML
+	void updateHeight(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			//TODO
+		}
+	}
+
+	@FXML
+	void updateLastName(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			//TODO
+		}
+	}
+
+	@FXML
+	void updateName(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			//TODO
+		}
+	}
+
+	@FXML
+	void updateNationality(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			//TODO
+		}
+	}
+
+	@FXML
+	void updateSex(KeyEvent event) {
+		if(event.getCode().equals(KeyCode.ENTER)) {
+			//TODO
+		}
+	}
+
+	
 	@FXML
 	void deleteCurrentUser(ActionEvent event) {
-		
-		if(currentPerson != null) {
+
+		if (currentPerson != null) {
 			db.delete(currentPerson);
 			currentPerson = null;
 		}
-	
+
 		idLabel.setText("");
 		nameTxt.setText("");
 		lastNameTxt.setText("");
@@ -265,7 +338,8 @@ public class UserManagement implements Initializable {
 		birthDatePicker.setValue(null);
 		heightTxt.setText("");
 		sexTxt.setText("");
-		
+		userImage.setImage(null);
+
 	}
 
 	@FXML
