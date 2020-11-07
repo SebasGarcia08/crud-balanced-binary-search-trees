@@ -3,6 +3,8 @@ package com.dalmatians.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,9 +38,9 @@ public class UserManagement implements Initializable {
 	@FXML
 	private Label numberOfPeopleLbl;
 
-    @FXML
-    private JFXDatePicker birthDatePicker;
-	
+	@FXML
+	private JFXDatePicker birthDatePicker;
+
 	@FXML
 	private JFXButton generateBtn;
 
@@ -76,7 +78,7 @@ public class UserManagement implements Initializable {
 	private JFXTextField nationalityTxt;
 
 	@FXML
-	private JFXButton deleteCurrentUserBtn;
+	private JFXButton Btn;
 
 	@FXML
 	private GridPane progressGridpane;
@@ -91,12 +93,15 @@ public class UserManagement implements Initializable {
 	private ProgressIndicator progressIndicator;
 
 	private Database db;
-
+	
+	Person currentPerson;
+	
 	private RandomPersonGenerator randomPersonGenerator;
 
 	public UserManagement() {
 		db = new Database();
 		randomPersonGenerator = new RandomPersonGenerator(db);
+		currentPerson = null;
 	}
 
 	@Override
@@ -108,7 +113,7 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Full Name");
 		searchingCriterion.getSelectionModel().selectFirst();
 		numUsersToGenerate.setText(Integer.MAX_VALUE + "");
-		numberOfPeopleLbl.setText(db.getPeople().length+ " people in database");
+		numberOfPeopleLbl.setText(db.getPeople().length + " people in database");
 	}
 
 	@FXML
@@ -124,25 +129,27 @@ public class UserManagement implements Initializable {
 		String key = searchText.getText();
 		List<Person> values = new LinkedList<>();
 		List<String> options = new ArrayList<>(100);
-		
+
 		if (selectedCriterion.equals("Id")) {
 			values = db.getIdTree().autoComplete(key, 100);
-			for(Person p : values)
+			for (Person p : values)
 				options.add(p.getId() + "");
 		} else if (selectedCriterion.equals("Name")) {
 			values = db.getFullnameTree().autoComplete(key, 100);
-			for(Person p : values)
+			for (Person p : values)
 				options.add(p.getFullName() + "");
 		} else if (selectedCriterion.equals("Surname")) {
 			values = db.getSurnameTree().autoComplete(key, 100);
-			for(Person p : values)
+			for (Person p : values)
 				options.add(p.getFullName() + "");
 		} else if (selectedCriterion.equals("Full Name")) {
 			values = db.getFullnameTree().autoComplete(key, 100);
-			for(Person p : values)
+			for (Person p : values)
 				options.add(p.getFullName() + "");
 		}
-		
+
+		System.out.println(values);
+
 		TextFields.bindAutoCompletion(searchText, options);
 	}
 
@@ -166,7 +173,7 @@ public class UserManagement implements Initializable {
 
 					Platform.runLater(() -> {
 						updateProgress(progress, n);
-						numberOfPeopleLbl.setText(progress+1 + " people in database");
+						numberOfPeopleLbl.setText(progress + 1 + " people in database");
 					});
 
 					try {
@@ -179,7 +186,7 @@ public class UserManagement implements Initializable {
 			generatingThread.setDaemon(true);
 			generatingThread.start();
 
-			new Thread(() -> {
+			Thread visualThread = new Thread(() -> {
 				try {
 					generatingThread.join();
 					Platform.runLater(() -> {
@@ -191,11 +198,16 @@ public class UserManagement implements Initializable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}).start();
+			});
+			visualThread.start();
 
-		} catch (NumberFormatException | IOException | URISyntaxException e) {
+			visualThread.join();
+			db.addPeopleToTrees();
+
+		} catch (NumberFormatException | IOException | URISyntaxException | InterruptedException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	@FXML
@@ -204,33 +216,34 @@ public class UserManagement implements Initializable {
 		String key = searchText.getText();
 		List<Person> found = null;
 		System.out.println(key);
-		
-		switch (key) {
+
+		switch (selectedCriterion) {
 		case "Id":
 			found = db.getIdTree().search(Integer.parseInt(key));
 			break;
 		case "Name":
-			found = db.getFullnameTree().search(key);			
+			found = db.getFullnameTree().search(key);
 			break;
 		case "Surname":
-			found = db.getSurnameTree().search(key);						
-			break;	
+			found = db.getSurnameTree().search(key);
+			break;
 		case "Full Name":
-			found = db.getFullnameTree().search(key);									
+			found = db.getFullnameTree().search(key);
 			break;
 		default:
 			break;
 		}
-		
-		if(found != null) {
+
+		if (found != null) {
 			Person person = found.get(0);
-			idLabel.setText(person .getId()+"");
-			nameTxt.setText(person .getName());
-			lastNameTxt.setText(person .getSurname());
-			nationalityTxt.setText(person .getNationality());
-			birthDatePicker.setValue(person .getBirthdate());
-			heightTxt.setText(person .getHeight() +"");
-			sexTxt.setText(person .getSex().toString());
+			currentPerson = person;
+			idLabel.setText(person.getId() + "");
+			nameTxt.setText(person.getName());
+			lastNameTxt.setText(person.getSurname());
+			nationalityTxt.setText(person.getNationality());
+			birthDatePicker.setValue(person.getBirthdate());
+			heightTxt.setText(person.getHeight() + "");
+			sexTxt.setText(person.getSex().toString());
 		} else {
 			System.out.println(found);
 			System.out.println(db.getFullnameTree());
@@ -239,7 +252,20 @@ public class UserManagement implements Initializable {
 
 	@FXML
 	void deleteCurrentUser(ActionEvent event) {
-
+		
+		if(currentPerson != null) {
+			db.delete(currentPerson);
+			currentPerson = null;
+		}
+	
+		idLabel.setText("");
+		nameTxt.setText("");
+		lastNameTxt.setText("");
+		nationalityTxt.setText("");
+		birthDatePicker.setValue(null);
+		heightTxt.setText("");
+		sexTxt.setText("");
+		
 	}
 
 	@FXML
@@ -306,7 +332,8 @@ public class UserManagement implements Initializable {
 		progressIndicator.setProgress(0);
 		progressMessage.setText("");
 	}
+
 	public void updatePeopleInDB() {
-		numberOfPeopleLbl.setText(db.getPeople().length+ " people in database");
+		numberOfPeopleLbl.setText(db.getPeople().length + " people in database");
 	}
 }

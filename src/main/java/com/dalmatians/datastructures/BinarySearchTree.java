@@ -335,8 +335,13 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 			key = key.toUpperCase();
 
 			int keySize = key.length();
-			String currKey = root.key.toString();
-			String subCurrKey = currKey.substring(0, keySize).toUpperCase();
+			String currKey = root.key.toString().toUpperCase();
+			
+			String subCurrKey = currKey;
+			if(keySize <= currKey.length()) {
+				subCurrKey = currKey.substring(0, keySize).toUpperCase();
+			}
+			
 
 			if (list.size() >= maxSize) {
 				list = list.subList(0, maxSize);

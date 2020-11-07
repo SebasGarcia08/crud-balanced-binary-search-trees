@@ -199,7 +199,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                          <children>
-                                                            <JFXDatePicker defaultColor="#00c6ff" />
+                                                            <JFXDatePicker fx:id="birthDatePicker" defaultColor="#00c6ff" />
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="103.0" GridPane.rowIndex="6">

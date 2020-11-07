@@ -88,6 +88,17 @@ public class Database implements Serializable {
 		this.people = new Person[n];
 	}
 	
+	
+	public void addPeopleToTrees() {
+		
+		for(Person person:people) {
+			idTree.add(person.getId(), person);
+			surnameTree.add(person.getSurname(), person);
+			fullnameTree.add(person.getFullName(), person);
+		}
+		
+	}
+	
 	public void readNames() throws IOException, URISyntaxException {
 //		Create the CSVFormat object
 		CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
@@ -157,6 +168,7 @@ public class Database implements Serializable {
 	public void delete(Person p) {
 		idTree.delete(p.getId());
 		fullnameTree.delete(p.getName() + " " + p.getSurname());
+		surnameTree.delete(p.getSurname());
 	}
 
 	public <T> void update(Person p, EDITABLE_ATTRIBUTE attr, T newValue) {
