@@ -3,6 +3,7 @@ package com.dalmatians.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -14,9 +15,11 @@ import com.dalmatians.model.Person;
 import com.dalmatians.model.RandomPersonGenerator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +30,20 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
 public class UserManagement implements Initializable {
+
+	public static final int N_CORES = Runtime.getRuntime().availableProcessors();
+
+	@FXML
+	private Label numberOfPeopleLbl;
+
+    @FXML
+    private JFXDatePicker birthDatePicker;
+	
+	@FXML
+	private JFXButton generateBtn;
+
+	@FXML
+	private JFXButton addBtn;
 
 	@FXML
 	private JFXTextField numUsersToGenerate;
@@ -74,14 +91,14 @@ public class UserManagement implements Initializable {
 	private ProgressIndicator progressIndicator;
 
 	private Database db;
-	
-	private RandomPersonGenerator randomGenerator;
+
+	private RandomPersonGenerator randomPersonGenerator;
 
 	public UserManagement() {
 		db = new Database();
-		randomGenerator = new RandomPersonGenerator(db);
+		randomPersonGenerator = new RandomPersonGenerator(db);
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		progressGridpane.setVisible(false);
@@ -91,36 +108,44 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Full Name");
 		searchingCriterion.getSelectionModel().selectFirst();
 		numUsersToGenerate.setText(Integer.MAX_VALUE + "");
+		numberOfPeopleLbl.setText(db.getPeople().length+ " people in database");
 	}
 
 	@FXML
 	void clearDatabase(ActionEvent event) {
-		
+		db.clear();
+		updatePeopleInDB();
 	}
-	
 
-    @FXML
-    void autoComplete(KeyEvent event) {
-    	
-    	String selectedCriterion = searchingCriterion.getValue();
-    	String key = searchText.getText();
-    	List<Person> values = new LinkedList<Person>();
-    	
-    	if(selectedCriterion.equals("Id")) {
-    		values = db.getIdTree().autoComplete(key, 100);
-    	}else if(selectedCriterion.equals("Name")) {
-    		
-    	}else if (selectedCriterion.equals("Surname")){
-    		
-    	}else if(selectedCriterion.equals("Full Name")) {
-    		values = db.getFullnameTree().autoComplete(key, 100);
-    	}
-    	
-    	System.out.println(values);
-    	
-    	TextFields.bindAutoCompletion(searchText, values);
-    }
-	
+	@FXML
+	void autoComplete(KeyEvent event) {
+
+		String selectedCriterion = searchingCriterion.getValue();
+		String key = searchText.getText();
+		List<Person> values = new LinkedList<>();
+		List<String> options = new ArrayList<>(100);
+		
+		if (selectedCriterion.equals("Id")) {
+			values = db.getIdTree().autoComplete(key, 100);
+			for(Person p : values)
+				options.add(p.getId() + "");
+		} else if (selectedCriterion.equals("Name")) {
+			values = db.getFullnameTree().autoComplete(key, 100);
+			for(Person p : values)
+				options.add(p.getFullName() + "");
+		} else if (selectedCriterion.equals("Surname")) {
+			values = db.getSurnameTree().autoComplete(key, 100);
+			for(Person p : values)
+				options.add(p.getFullName() + "");
+		} else if (selectedCriterion.equals("Full Name")) {
+			values = db.getFullnameTree().autoComplete(key, 100);
+			for(Person p : values)
+				options.add(p.getFullName() + "");
+		}
+		
+		TextFields.bindAutoCompletion(searchText, options);
+	}
+
 	@FXML
 	void generateUsers(ActionEvent event) {
 		try {
@@ -129,19 +154,87 @@ public class UserManagement implements Initializable {
 			progressMessage.setText("Generating " + n + " persons...");
 			db.preapteForGenerate(n);
 
-			randomGenerator.reset(0, n);
-			
-			
-			
-			
+			randomPersonGenerator.reset(0, n);
+			Thread generatingThread = new Thread(() -> {
+				addBtn.setDisable(true);
+				generateBtn.setDisable(true);
+				Person p;
+				int workDone = 0;
+				while ((p = randomPersonGenerator.getNextPerson()) != null) {
+					db.getPeople()[workDone] = p;
+					final int progress = workDone++;
+
+					Platform.runLater(() -> {
+						updateProgress(progress, n);
+						numberOfPeopleLbl.setText(progress+1 + " people in database");
+					});
+
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			generatingThread.setDaemon(true);
+			generatingThread.start();
+
+			new Thread(() -> {
+				try {
+					generatingThread.join();
+					Platform.runLater(() -> {
+						addBtn.setDisable(false);
+						generateBtn.setDisable(false);
+						resetProgress();
+						progressGridpane.setVisible(false);
+					});
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}).start();
+
 		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@FXML
-	void searchPerson(ActionEvent event) {
-
+	public void searchPerson(ActionEvent event) {
+		String selectedCriterion = searchingCriterion.getValue();
+		String key = searchText.getText();
+		List<Person> found = null;
+		System.out.println(key);
+		
+		switch (key) {
+		case "Id":
+			found = db.getIdTree().search(Integer.parseInt(key));
+			break;
+		case "Name":
+			found = db.getFullnameTree().search(key);			
+			break;
+		case "Surname":
+			found = db.getSurnameTree().search(key);						
+			break;	
+		case "Full Name":
+			found = db.getFullnameTree().search(key);									
+			break;
+		default:
+			break;
+		}
+		
+		if(found != null) {
+			Person person = found.get(0);
+			idLabel.setText(person .getId()+"");
+			nameTxt.setText(person .getName());
+			lastNameTxt.setText(person .getSurname());
+			nationalityTxt.setText(person .getNationality());
+			birthDatePicker.setValue(person .getBirthdate());
+			heightTxt.setText(person .getHeight() +"");
+			sexTxt.setText(person .getSex().toString());
+		} else {
+			System.out.println(found);
+			System.out.println(db.getFullnameTree());
+		}
 	}
 
 	@FXML
@@ -151,9 +244,42 @@ public class UserManagement implements Initializable {
 
 	@FXML
 	void addUsers(ActionEvent event) {
-		for (Person p : db.getPeople()) {
-			db.getIdTree().add(p.getId(), p);
-			db.getFullnameTree().add(p.getFullName(), p);
+		try {
+			progressGridpane.setVisible(true);
+			addBtn.setDisable(true);
+			generateBtn.setDisable(true);
+			progressMessage.setText("Adding " + db.getPeople().length + " persons to tree...");
+			Thread t = new Thread(() -> {
+				int total = db.getPeople().length;
+				int current = 0;
+				for (Person p : db.getPeople()) {
+					db.getIdTree().add(p.getId(), p);
+					db.getFullnameTree().add(p.getFullName(), p);
+					db.getSurnameTree().add(p.getSurname(), p);
+					final int curr = current++;
+					Platform.runLater(() -> {
+						updateProgress(curr, total);
+					});
+				}
+			});
+			t.setDaemon(true);
+			t.start();
+
+			new Thread(() -> {
+				try {
+					t.join();
+					Platform.runLater(() -> {
+						addBtn.setDisable(false);
+						generateBtn.setDisable(false);
+						resetProgress();
+						progressGridpane.setVisible(false);
+					});
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}).start();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -168,10 +294,19 @@ public class UserManagement implements Initializable {
 	public void setProgressMessage(String msg) {
 		this.progressMessage.setText(msg);
 	}
-	
+
 	public void updateProgress(double progress, int n) {
-		operationsProgressBar.setProgress(progress / n);
-		progressIndicator.setProgress(progress / n);
+		double prog = progress / (double) n;
+		operationsProgressBar.setProgress(prog);
+		progressIndicator.setProgress(prog);
 	}
 
+	public void resetProgress() {
+		operationsProgressBar.setProgress(0);
+		progressIndicator.setProgress(0);
+		progressMessage.setText("");
+	}
+	public void updatePeopleInDB() {
+		numberOfPeopleLbl.setText(db.getPeople().length+ " people in database");
+	}
 }

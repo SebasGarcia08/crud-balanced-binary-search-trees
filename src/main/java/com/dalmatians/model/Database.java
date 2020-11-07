@@ -41,6 +41,8 @@ public class Database implements Serializable {
 	private Person[] people;
 	
 	private BalancedBSTree<Integer, Person> idTree;
+
+	private BalancedBSTree<String, Person> surnameTree;
 	
 	private BalancedBSTree<String, Person> fullnameTree;
 		
@@ -55,6 +57,7 @@ public class Database implements Serializable {
 	public Database() {
 		idTree = new AVLBSTree<>();
 		fullnameTree = new AVLBSTree<>();
+		surnameTree = new AVLBSTree<>();
 
 		gender2Name = new HashMap<>();
 		gender2Name.put("boy", new String[3437]); // 3437 is the number of boy names		
@@ -62,7 +65,7 @@ public class Database implements Serializable {
 		surnames = new String[1000];
 		nationalitiesProportions = new double[33]; // 33 countries
 		nationalities = new String[33];
-		
+		people = new Person[0];
 		try {
 			readNames();
 			readSurnames();
@@ -208,7 +211,7 @@ public class Database implements Serializable {
 	 * @param people the people to set
 	 */
 	public void clear() {
-		this.people = null;
+		this.people = new Person[0];
 	}
 
 	/**
@@ -237,5 +240,12 @@ public class Database implements Serializable {
 	 */
 	public double[] getNationalitiesProportions() {
 		return nationalitiesProportions;
+	}
+
+	/**
+	 * @return the surnameTree
+	 */
+	public BalancedBSTree<String, Person> getSurnameTree() {
+		return surnameTree;
 	}	
 }

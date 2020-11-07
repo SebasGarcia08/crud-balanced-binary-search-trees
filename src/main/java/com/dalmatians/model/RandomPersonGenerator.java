@@ -120,7 +120,7 @@ public class RandomPersonGenerator {
 	}
 
 	private LocalDate generateBirthDate() {
-		return generateBirthdate(generateNextAge());
+		return generateBirthDate(generateNextAge());
 	}
 
 	private int generateNextAge() {
@@ -148,7 +148,7 @@ public class RandomPersonGenerator {
 		return age;
 	}
 
-	private LocalDate generateBirthdate(int age) {
+	private LocalDate generateBirthDate(int age) {
 		return LocalDate.now().minusYears(age).minusDays(generateRandomIntInRange(0.0, 360.0)); // Adds noise to the
 																								// birthdate
 	}

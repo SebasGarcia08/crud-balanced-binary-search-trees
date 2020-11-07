@@ -69,7 +69,7 @@
                                                 <Insets right="30.0" />
                                              </HBox.margin>
                                           </JFXTextField>
-                                          <JFXButton id="submitButton" buttonType="RAISED" onAction="#generateUsers" prefHeight="45.0" prefWidth="113.0" text="Generate" textFill="WHITE">
+                                          <JFXButton id="submitButton" fx:id="generateBtn" buttonType="RAISED" onAction="#generateUsers" prefHeight="45.0" prefWidth="113.0" text="Generate" textFill="WHITE">
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
@@ -77,7 +77,7 @@
                                                 <Insets right="30.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton id="submitButton" buttonType="RAISED" onAction="#addUsers" prefHeight="45.0" prefWidth="113.0" text="Add" textFill="WHITE">
+                                          <JFXButton id="submitButton" fx:id="addBtn" buttonType="RAISED" onAction="#addUsers" prefHeight="45.0" prefWidth="113.0" text="Add" textFill="WHITE">
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
@@ -132,9 +132,9 @@
                               </HBox>
                               <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="operationBox">
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="operationBox" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <ImageView fx:id="userImage" fitHeight="381.0" fitWidth="381.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                                          <ImageView fx:id="userImage" fitHeight="381.0" fitWidth="391.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <HBox.margin>
                                           <Insets right="20.0" />
@@ -267,6 +267,13 @@
                            </BorderPane.margin>
                         </VBox>
                      </center>
+                     <top>
+                        <Label fx:id="numberOfPeopleLbl" prefHeight="16.0" prefWidth="258.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" />
+                           </BorderPane.margin>
+                        </Label>
+                     </top>
                   </BorderPane>
                </children>
                <BorderPane.margin>
