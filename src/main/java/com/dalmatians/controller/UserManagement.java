@@ -155,7 +155,7 @@ public class UserManagement implements Initializable {
 		} else if (selectedCriterion.equals("Surname")) {
 			values = db.getSurnameTree().autoComplete(key, 100);
 			for (Person p : values)
-				options.add(p.getFullName() + "");
+				options.add(p.getSurname() + "");
 		} else if (selectedCriterion.equals("Full Name")) {
 			values = db.getFullnameTree().autoComplete(key, 100);
 			for (Person p : values)
@@ -213,10 +213,9 @@ public class UserManagement implements Initializable {
 			});
 			visualThread.start();
 
-			visualThread.join();
-			db.addPeopleToTrees();
+//			visualThread.join();-
 
-		} catch (NumberFormatException | IOException | URISyntaxException | InterruptedException e) {
+		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 
@@ -451,9 +450,7 @@ public class UserManagement implements Initializable {
 				int total = db.getPeople().length;
 				int current = 0;
 				for (Person p : db.getPeople()) {
-					db.getIdTree().add(p.getId(), p);
-					db.getFullnameTree().add(p.getFullName(), p);
-					db.getSurnameTree().add(p.getSurname(), p);
+					db.addIthPersonToTrees(current);
 					final int curr = current++;
 					Platform.runLater(() -> {
 						updateProgress(curr, total);
@@ -479,6 +476,7 @@ public class UserManagement implements Initializable {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
+//		db.addPeopleToTrees();
 	}
 
 	public void showProgressPane() {

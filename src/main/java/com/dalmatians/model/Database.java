@@ -88,6 +88,12 @@ public class Database implements Serializable {
 		this.people = new Person[n];
 	}
 	
+	public void addIthPersonToTrees(int i) {
+		Person person = people[i];
+		idTree.add(person.getId(), person);
+		surnameTree.add(person.getSurname(), person);
+		fullnameTree.add(person.getFullName(), person);		
+	}
 	
 	public void addPeopleToTrees() {
 		
