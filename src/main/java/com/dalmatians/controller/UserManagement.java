@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 
 import org.controlsfx.control.textfield.TextFields;
 
+import com.dalmatians.datastructures.BalancedBSTree;
 import com.dalmatians.model.Database;
 import com.dalmatians.model.Person;
 import com.dalmatians.model.RandomPersonGenerator;
@@ -112,6 +113,7 @@ public class UserManagement implements Initializable {
 
 	public UserManagement() {
 		db = new Database();
+
 		randomPersonGenerator = new RandomPersonGenerator(db);
 		currentPerson = null;
 	}
@@ -255,7 +257,7 @@ public class UserManagement implements Initializable {
 			heightTxt.setText(person.getHeight() + "");
 			sexTxt.setText(person.getSex().toString());
 
-			getUserImage(); 
+			getUserImage();
 
 		} else {
 			System.out.println(found);
@@ -269,11 +271,11 @@ public class UserManagement implements Initializable {
 		try {
 
 			URL url = new URL("https://thispersondoesnotexist.com/image");
-			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection(); 
-	    	httpcon.addRequestProperty("User-Agent", ""); 
-	    	image = ImageIO.read(httpcon.getInputStream());
+			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+			httpcon.addRequestProperty("User-Agent", "");
+			image = ImageIO.read(httpcon.getInputStream());
 			userImage.setImage(SwingFXUtils.toFXImage(image, null));
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -282,47 +284,143 @@ public class UserManagement implements Initializable {
 
 	@FXML
 	void updateBirthday(KeyEvent event) {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			//TODO
+		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
+
+			try {
+				currentPerson.setBirthdate(birthDatePicker.getValue());
+			} catch (Exception e) {
+
+			}
+
 		}
 	}
 
 	@FXML
 	void updateHeight(KeyEvent event) {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			//TODO
+
+		try {
+			if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
+				currentPerson.setHeight(Double.parseDouble(heightTxt.getText()));
+			}
+		} catch (Exception e) {
+
 		}
+
 	}
 
-	@FXML
-	void updateLastName(KeyEvent event) {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			//TODO
-		}
-	}
+	public void updateNames() {
+		// TODO
+		// Eliminar del arbol de nombres y apellidos y volver a agregar a la persona
 
+		BalancedBSTree<String, Person> surnameTree = db.getSurnameTree();
+		BalancedBSTree<String, Person> fullnameTree = db.getFullnameTree();
+
+		// Eliminar del arbol FullName
+		LinkedList<Person> personsFullName = (LinkedList<Person>) fullnameTree.search(currentPerson.getFullName());
+		if (personsFullName.size() > 1) {
+			for (int i = 0; i < personsFullName.size(); i++) {
+				if (personsFullName.get(i).equals(currentPerson)) {
+					personsFullName.remove(currentPerson);
+				}
+			}
+
+		} else if (personsFullName.size() == 1) {
+			personsFullName.remove(0);
+			fullnameTree.delete(currentPerson.getFullName());
+		}
+
+		// Eliminar del arbol Surname
+		LinkedList<Person> personsSurName = (LinkedList<Person>) surnameTree.search(currentPerson.getSurname());
+		if (personsSurName.size() > 1) {
+			for (int i = 0; i < personsSurName.size(); i++) {
+				if (personsSurName.get(i).equals(currentPerson)) {
+					personsSurName.remove(currentPerson);
+				}
+			}
+
+		} else if (personsSurName.size() == 1) {
+			personsSurName.remove(0);
+			surnameTree.delete(currentPerson.getSurname());
+		}
+		
+		
+		currentPerson.setName(nameTxt.getText());
+		currentPerson.setSurname(lastNameTxt.getText());
+		
+		fullnameTree.add(currentPerson.getFullName(), currentPerson);
+		surnameTree.add(currentPerson.getSurname(), currentPerson);
+		
+		System.out.println("Actualizó");
+		
+	}
+	
 	@FXML
 	void updateName(KeyEvent event) {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			//TODO
+		
+		System.out.println("Pre");
+		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
+			try {
+				
+				System.out.println("Entro Update Name");
+				updateNames();
+				
+
+				// Dejen esto si no logran terminarlo
+				// surnameTree.delete(currentPerson.getSurname());
+				// surnameTree.add(currentPerson.getSurname(), currentPerson);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	
+	@FXML
+	void updateLastName(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
+			try {
+				
+				updateNames();
+				
+				// TODO
+				// Eliminar del arbol de nombres y apellidos y volver a agregar a la persona
+			} catch (Exception e) {
+
+			}
 		}
 	}
 
 	@FXML
 	void updateNationality(KeyEvent event) {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			//TODO
+		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
+			try {
+				currentPerson.setNationality(nationalityTxt.getText().toUpperCase());
+			} catch (Exception e) {
+
+			}
 		}
 	}
 
 	@FXML
 	void updateSex(KeyEvent event) {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			//TODO
+		if (event.getCode().equals(KeyCode.ENTER) && currentPerson != null) {
+			try {
+				String input = sexTxt.getText();
+
+				if (input.equalsIgnoreCase("M")) {
+					currentPerson.setSex(Person.SEX.M);
+				} else if (input.equalsIgnoreCase("F")) {
+					currentPerson.setSex(Person.SEX.F);
+				}
+
+			} catch (Exception e) {
+
+			}
 		}
 	}
 
-	
 	@FXML
 	void deleteCurrentUser(ActionEvent event) {
 
