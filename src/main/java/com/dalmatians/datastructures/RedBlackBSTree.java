@@ -1,15 +1,18 @@
 package com.dalmatians.datastructures;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.dalmatians.datastructures.BinarySearchTree.Node;
+public class RedBlackBSTree<K extends Comparable<K>, V> implements Serializable {
 
-public class RedBlackBSTree<K extends Comparable<K>, V> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3780276775535770707L;
 
 	public static void main(String[] args) {
 		
@@ -69,9 +72,6 @@ public class RedBlackBSTree<K extends Comparable<K>, V> {
 		tree.delete(80);
 		tree.print2D();
 		System.out.println("===========================");
-//		tree.delete(17);
-//		tree.print2D();
-//		System.out.println("===========================");
 	}
 
 	protected class NodeRB<K extends Comparable<? super K>, V> {

@@ -118,7 +118,7 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Surname");
 		searchingCriterion.getItems().add("Full Name");
 		searchingCriterion.getSelectionModel().selectFirst();
-		numUsersToGenerate.setText(Integer.MAX_VALUE + "");
+		numUsersToGenerate.setText(10000 + "");
 		numberOfPeopleLbl.setText(db.getPeople().length + " people in database");
 	}
 

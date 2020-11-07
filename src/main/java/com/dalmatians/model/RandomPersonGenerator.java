@@ -1,12 +1,18 @@
 package com.dalmatians.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Random;
 
 import com.dalmatians.model.Person.SEX;
 
-public class RandomPersonGenerator {
+public class RandomPersonGenerator implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1457847387207347586L;
 
 	/**
 	 * This matrix represents the distribution of ages in United States 

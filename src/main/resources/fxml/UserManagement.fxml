@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXProgressBar?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
@@ -257,6 +258,7 @@
                                                 </GridPane>
                                              </children>
                                           </HBox>
+                                          <JFXTextArea editable="false" layoutX="110.0" layoutY="387.0" prefHeight="61.0" prefWidth="225.0" text="In order to delete a field, please change its value and press ENTER" />
                                        </children>
                                     </AnchorPane>
                                  </children>

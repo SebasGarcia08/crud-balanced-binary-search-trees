@@ -1,5 +1,6 @@
 package com.dalmatians.datastructures;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,7 +18,12 @@ import com.dalmatians.datastructures.BinarySearchTree.Node;
  * @author Sebastian Garcia Acosta
  * @param <K,V>, any class that implements the Comparable interface
  */
-public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<List<V>> {
+public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<List<V>>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3509254229421105483L;
+
 	/**
 	 * This class represents the node of the BST.
 	 * 
@@ -27,7 +33,12 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 	 * @param <K,V>, any class that implements the Comparable interface
 	 */
 	@SuppressWarnings("hiding")
-	protected class Node<K extends Comparable<? super K>, V> {
+	protected class Node<K extends Comparable<? super K>, V> implements Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3073345467094967068L;
 
 		/** Parent node */
 		protected Node<K, V> parent;
