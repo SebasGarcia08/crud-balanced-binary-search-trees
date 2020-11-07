@@ -1,7 +1,13 @@
 package com.dalmatians.model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -37,6 +43,8 @@ public class Database implements Serializable {
 	public enum EDITABLE_ATTRIBUTE {
 		NAME, FULLNAME, SURNAME, SEX, BIRTHDATE, HEIGHT
 	}
+	
+	public static final String SERIALIZATION_PATH = "src/main/resources/data/database.dat";
 		
 	private Person[] people;
 	
@@ -159,15 +167,29 @@ public class Database implements Serializable {
 		return nationalities[0] != null;
 	}
 	
-	public static void load(String path) {
-		
+	public static Database load() throws IOException, ClassNotFoundException {
+		File file = new File(SERIALIZATION_PATH);
+		if (file.exists()) {
+			FileInputStream fileInput = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(fileInput);
+			Database db = (Database) in.readObject();
+			return db;
+		}
+		return null;
 	}
 
-	public void save(String path) {
-		
+	public void save(String path) throws IOException {
+		FileOutputStream file = new FileOutputStream(SERIALIZATION_PATH);
+		ObjectOutputStream out = new ObjectOutputStream(file);
+		out.writeObject(this);
+		out.close();
 	}
 	
-	public static Database getDatabase() {
+	public static Database getDatabase() throws ClassNotFoundException, IOException {
+		Database db = load();
+		if (db != null) {
+			return db;
+		}
 		return new Database();
 	}
 	

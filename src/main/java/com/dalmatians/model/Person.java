@@ -1,8 +1,14 @@
 package com.dalmatians.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Person {
+public class Person implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8995712686297166943L;
 
 	public enum SEX {
 		M, F
