@@ -3,7 +3,11 @@ package com.dalmatians.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import org.controlsfx.control.textfield.TextFields;
 
 import com.dalmatians.model.Database;
 import com.dalmatians.model.Person;
@@ -17,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -81,6 +86,7 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Name");
 		searchingCriterion.getItems().add("Surname");
 		searchingCriterion.getItems().add("Full Name");
+		searchingCriterion.getSelectionModel().selectFirst();
 		numUsersToGenerate.setText(Integer.MAX_VALUE + "");
 	}
 
@@ -93,9 +99,23 @@ public class UserManagement implements Initializable {
     @FXML
     void autoComplete(KeyEvent event) {
     	
-    	//searchingCriterion.get
+    	String selectedCriterion = searchingCriterion.getValue();
+    	String key = searchText.getText();
+    	List<Person> values = new LinkedList<Person>();
     	
+    	if(selectedCriterion.equals("Id")) {
+    		values = db.getIdTree().autoComplete(key, 100);
+    	}else if(selectedCriterion.equals("Name")) {
+    		
+    	}else if (selectedCriterion.equals("Surname")){
+    		
+    	}else if(selectedCriterion.equals("Full Name")) {
+    		values = db.getFullnameTree().autoComplete(key, 100);
+    	}
     	
+    	System.out.println(values);
+    	
+    	TextFields.bindAutoCompletion(searchText, values);
     }
 	
 	@FXML

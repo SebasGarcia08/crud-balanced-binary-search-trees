@@ -1,5 +1,7 @@
 package com.dalmatians.datastructures;
 
+import java.util.List;
+
 public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> implements BalancedBSTree<K, V>{
 
 	public AVLBSTree() {
@@ -92,5 +94,10 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	@Override
 	public String toString() {
 		return string2D();
+	}
+
+	@Override
+	public List<V> autoComplete(String key, int maxSize) {
+		return preorderLookUp(key, maxSize);
 	}
 }

@@ -321,7 +321,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		}
 	}
 	
-	public List<V> preorderLookUp(K key, int maxSize) {
+	public List<V> preorderLookUp(String key, int maxSize) {
 		List<V> list = new LinkedList<>();
 		preorderLookUp(root, list, key.toString(), maxSize);
 		return list;
