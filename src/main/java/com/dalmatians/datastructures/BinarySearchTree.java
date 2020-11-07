@@ -134,6 +134,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		// Pass initial space count as 0
 		return string2DUtil(root, 0, "");
 	}
+
 	/**
 	 * Searches an element in the tree
 	 * 
@@ -365,7 +366,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		y.height = 1 + Math.max(height(y.left), height(y.right));
 		return y;
 	}
-	
+
 	@Override
 	public Iterator<List<V>> iterator() {
 		return new InorderIterator();

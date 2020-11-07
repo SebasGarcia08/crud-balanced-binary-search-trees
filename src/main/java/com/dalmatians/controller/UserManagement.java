@@ -7,11 +7,15 @@ import java.util.ResourceBundle;
 
 import com.dalmatians.model.Database;
 import com.dalmatians.model.Person;
+import com.dalmatians.threads.PersonGeneratorService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class UserManagement implements Initializable {
+
+	private static final int N_CORES = 4;
 
 	@FXML
 	private JFXTextField numUsersToGenerate;
@@ -69,8 +75,46 @@ public class UserManagement implements Initializable {
 
 	private Database db;
 
+	private PersonGeneratorService[] personGenerators;
+
 	public UserManagement() {
 		db = new Database();
+		this.personGenerators = new PersonGeneratorService[N_CORES];
+		
+		for (int i = 0; i < personGenerators.length; i++) {
+			personGenerators[i] = new PersonGeneratorService(db);
+		}
+		
+	}
+
+	/**
+	 * Divides the progress of a progress bar into n Services concurrent tasks
+	 * 
+	 * task{0}.progressProperty().multiply(rate).add(
+	 * 		task{1}.progressProperty().multiply(rate).add( 
+	 * 			task{n-1}.progressProperty().add(0)
+	 * 		)
+	 * )
+	 * 
+	 * @param <T>, a Service subclass
+	 * @param tasks
+	 * @param i
+	 * @return
+	 */
+	public <T extends Service<Void>> DoubleBinding getProgressBinding(T[] tasks, int i) {
+		if (i < tasks.length) {
+			return tasks[i].progressProperty().multiply(1.0/tasks.length).add(
+						getProgressBinding(tasks, i + 1)
+					);
+		} else {
+			return new DoubleBinding() {
+				
+				@Override
+				protected double computeValue() {
+					return 0;
+				}
+			};
+		}
 	}
 
 	@Override
@@ -96,15 +140,16 @@ public class UserManagement implements Initializable {
 			progressMessage.setText("Generating " + n + " persons...");
 			db.preapteForGenerate(n);
 			
-			for (int i = 0; i < n; i++) {
-				db.getPeople()[i] = db.createRandomPerson(i);
-
-				final double progress = (double) i / (double) n;
-				operationsProgressBar.setProgress(progress);
-				progressIndicator.setProgress(progress);
+			int start = 0;
+			int amount = n / personGenerators.length;
+			
+			for(int i = 0; i < personGenerators.length-1; i++) {
+				personGenerators[i].generate(start, start + amount);
+				start += amount;
 			}
 			
-//			Platform.runLater(() -> progressGridpane.setVisible(false));
+			personGenerators[personGenerators.length-1].generate(start, n - start);
+			
 		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -122,9 +167,22 @@ public class UserManagement implements Initializable {
 
 	@FXML
 	void addUsers(ActionEvent event) {
-		for(Person p : db.getPeople()) {
+		for (Person p : db.getPeople()) {
 			db.getIdTree().add(p.getId(), p);
 			db.getFullnameTree().add(p.getFullName(), p);
 		}
 	}
+
+	public void showProgressPane() {
+		progressGridpane.setVisible(true);
+	}
+
+	public void hideProgressPane() {
+		progressGridpane.setVisible(false);
+	}
+
+	public void setProgressMessage(String msg) {
+		this.progressMessage.setText(msg);
+	}
+
 }
