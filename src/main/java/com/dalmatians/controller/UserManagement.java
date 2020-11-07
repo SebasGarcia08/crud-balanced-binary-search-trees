@@ -112,7 +112,7 @@ public class UserManagement implements Initializable {
 	private RandomPersonGenerator randomPersonGenerator;
 
 	public UserManagement() {
-		db = new Database();
+		db = Database.getDatabase();
 
 		randomPersonGenerator = new RandomPersonGenerator(db);
 		currentPerson = null;

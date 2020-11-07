@@ -164,7 +164,11 @@ public class Database implements Serializable {
 	}
 
 	public void save(String path) {
-		//TODO Implement serialization
+		
+	}
+	
+	public static Database getDatabase() {
+		return new Database();
 	}
 	
 	public Person search(CRITERION criteria, String value) {
