@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
 public class UserManagement implements Initializable {
@@ -87,7 +88,16 @@ public class UserManagement implements Initializable {
 	void clearDatabase(ActionEvent event) {
 
 	}
+	
 
+    @FXML
+    void autoComplete(KeyEvent event) {
+    	
+    	//searchingCriterion.get
+    	
+    	
+    }
+	
 	@FXML
 	void generateUsers(ActionEvent event) {
 		try {

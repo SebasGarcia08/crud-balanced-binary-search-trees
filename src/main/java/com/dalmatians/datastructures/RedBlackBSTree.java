@@ -12,7 +12,7 @@ import com.dalmatians.datastructures.BinarySearchTree.Node;
 public class RedBlackBSTree<K extends Comparable<K>, V> {
 
 	public static void main(String[] args) {
-
+		
 		System.out.println("TEST");
 		RedBlackBSTree<Integer, Integer> tree = new RedBlackBSTree<>();
 
@@ -318,13 +318,8 @@ public class RedBlackBSTree<K extends Comparable<K>, V> {
 			blackHeight++;
 		}
 
-<<<<<<< Updated upstream
 		// Step 3: If color of xs parent is not BLACK or x is not root
-		if (x.parent != null && x.parent.color == true || x != root) { // TODO RE CHECK EVALUATION
-=======
-		// Step 3: If color of x’s parent is not BLACK or x is not root
 		if (x.parent != null && x.parent.color == true || x != root) {
->>>>>>> Stashed changes
 			solveViolation(x);
 		}
 	}

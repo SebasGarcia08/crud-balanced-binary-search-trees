@@ -7,18 +7,35 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	}
 	
 	public static void main(String[] args) {
-		AVLBSTree<Integer, Integer> avl = new AVLBSTree<>();
-		avl.add(1, 1);
-		avl.add(2, 2);
-		avl.add(3, 3);
-		avl.add(4, 4);
-		avl.add(5, 5);
-		avl.add(6, 6);
-		avl.add(7, 7);
-		avl.add(7, 0);
+//		AVLBSTree<Integer, Integer> avl = new AVLBSTree<>();
+//		avl.add(1, 1);
+//		avl.add(2, 2);
+//		avl.add(3, 3);
+//		avl.add(4, 4);
+//		avl.add(5, 5);
+//		avl.add(6, 6);
+//		avl.add(7, 7);
+//		avl.add(7, 0);
+//		avl.print2D();
+//		avl.delete(3);
+//		avl.print2D();
+		
+		AVLBSTree<String, String> avl = new AVLBSTree<>();
+		avl.add("Chris", "Chris");
+		avl.add("Maria", "Maria");
+		avl.add("Juan", "Juan");
+		avl.add("Clau", "Clau");
+		avl.add("Claudio", "Claudio");
+		avl.add("Clausilio", "Clausilio");
+		avl.add("Julia", "Julia");
+		avl.add("CZ", "CZ");
+		avl.add("CZZZZZZZZZZZZZ", "CZZZZZZZZZZZZZ");
 		avl.print2D();
-		avl.delete(3);
-		avl.print2D();
+		
+		System.out.println("========");
+		System.out.println(avl.preorderLookUp("JU", 100));
+		
+		
 	}
 
 	@Override
