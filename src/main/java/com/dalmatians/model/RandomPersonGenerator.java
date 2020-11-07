@@ -43,10 +43,8 @@ public class RandomPersonGenerator {
 	
 	private int end;
 	
-	public RandomPersonGenerator(int start, int end, String[] surnames, String[] natioanlities, double[] natilalitiesProportions,
+	public RandomPersonGenerator(String[] surnames, String[] natioanlities, double[] natilalitiesProportions,
 			HashMap<String, String[]> gender2Name) {
-		this.start = start;
-		this.end = end;
 		this.surnames = surnames;
 		this.nationalities = natioanlities;
 		this.nationalitiesProportions = natilalitiesProportions;
@@ -55,7 +53,6 @@ public class RandomPersonGenerator {
 		femaleHeightsGenerator = new RandomGaussian(1.65, 0.05);
 		maleHeightsGenerator = new RandomGaussian(1.72, 0.05);
 		uniformGenerator = new Random();
-		ithPersonGenerated = start;
 
 		// Calculate the cumulative sum of percentages over the proportions of
 		// population with ages
@@ -67,9 +64,18 @@ public class RandomPersonGenerator {
 		}
 	}
 
+	public void reset(int start, int end) {
+		this.start = start;
+		this.end = end;
+		this.ithPersonGenerated = start;
+	}
+	
 	public Person getNextPerson() {
-		if(ithPersonGenerated < (end - start))
-			return createRandomPerson(ithPersonGenerated++);
+		if(ithPersonGenerated < end) {
+			Person p = createRandomPerson(ithPersonGenerated);
+			ithPersonGenerated++;
+			return p;
+		}
 		else return null;
 	}
 

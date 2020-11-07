@@ -1,5 +1,8 @@
 package com.dalmatians.threads;
 
+import java.util.Arrays;
+
+import com.dalmatians.controller.UserManagement;
 import com.dalmatians.model.Database;
 import com.dalmatians.model.Person;
 import com.dalmatians.model.RandomPersonGenerator;
@@ -15,31 +18,49 @@ public class PersonGeneratorService extends Service<Void> {
 	private int end;
 	private int id;
 	private RandomPersonGenerator randomPersonGen;
-	
-	public PersonGeneratorService(Database db) {
-		randomPersonGen = new RandomPersonGenerator(start, end, db.getSurnames(), db.getNationalities(),
+	private UserManagement controller;
+
+	public PersonGeneratorService(UserManagement controller, Database db) {
+		randomPersonGen = new RandomPersonGenerator(db.getSurnames(), db.getNationalities(),
 				db.getNationalitiesProportions(), db.getGender2Name());
+		this.controller = controller;
+		setOnSucceeded((s) -> {
+			System.out.println("Finished!!!");
+			System.out.println(Arrays.toString(db.getPeople()));
+		});
+
+		setOnRunning((s) -> {
+			System.out.println("Running");
+		});
 	}
 
 	public void generate(int start, int end) {
-		this.n = end - start;
-		this.id = start;
-		reset();
-		start();
+		if (!isRunning()) {
+			n = end - start;
+			id = start;
+			randomPersonGen.reset(start, end);
+			this.reset();
+			this.start();
+		}
 	}
-	
+
 	@Override
 	protected Task<Void> createTask() {
 		return new Task<Void>() {
 
 			@Override
 			protected Void call() {
-				this.updateProgress(0, n);
+				updateProgress(0, n);
 				if (!isCancelled()) {
 					updateMessage("Running...");
-					int workDone = 0;
 					Person p;
+					int workDone = 0;
 					while ((p = randomPersonGen.getNextPerson()) != null) {
+						if (isCancelled()) {
+							System.out.println("Canceled");
+							updateProgress(0, n);
+						}
+						System.out.println(p);
 						db.getPeople()[id++] = p;
 						updateProgress(workDone++, n);
 					}

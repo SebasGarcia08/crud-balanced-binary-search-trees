@@ -20,13 +20,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class UserManagement implements Initializable {
 
-	private static final int N_CORES = 4;
+	private static final int N_CORES = Runtime.getRuntime().availableProcessors();
 
 	@FXML
 	private JFXTextField numUsersToGenerate;
@@ -82,9 +83,8 @@ public class UserManagement implements Initializable {
 		this.personGenerators = new PersonGeneratorService[N_CORES];
 		
 		for (int i = 0; i < personGenerators.length; i++) {
-			personGenerators[i] = new PersonGeneratorService(db);
+			personGenerators[i] = new PersonGeneratorService(this, db);
 		}
-		
 	}
 
 	/**
@@ -124,7 +124,9 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Name");
 		searchingCriterion.getItems().add("Surname");
 		searchingCriterion.getItems().add("Full Name");
-		numUsersToGenerate.setText(Integer.MAX_VALUE + "");
+		numUsersToGenerate.setText(100 + "");
+		operationsProgressBar.progressProperty().bind(getProgressBinding(personGenerators, 0));
+		progressIndicator.progressProperty().bind(getProgressBinding(personGenerators, 0));
 	}
 
 	@FXML
@@ -148,7 +150,7 @@ public class UserManagement implements Initializable {
 				start += amount;
 			}
 			
-			personGenerators[personGenerators.length-1].generate(start, n - start);
+			personGenerators[personGenerators.length-1].generate(start, n);
 			
 		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -183,6 +185,11 @@ public class UserManagement implements Initializable {
 
 	public void setProgressMessage(String msg) {
 		this.progressMessage.setText(msg);
+	}
+
+	public ProgressBar getOperationsProgressBar() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
