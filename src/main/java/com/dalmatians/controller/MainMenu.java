@@ -52,7 +52,7 @@ public class MainMenu implements Initializable {
 	}
     
     @FXML
-    void exit(ActionEvent event) {
+    void exit(ActionEvent event) { 	
     	System.exit(0);
     }
 

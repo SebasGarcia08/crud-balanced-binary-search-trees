@@ -111,7 +111,7 @@ public class UserManagement implements Initializable {
 
 	private RandomPersonGenerator randomPersonGenerator;
 
-	public UserManagement() {
+	public UserManagement() throws ClassNotFoundException, IOException {
 		db = Database.getDatabase();
 
 		randomPersonGenerator = new RandomPersonGenerator(db);
