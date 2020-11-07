@@ -321,7 +321,44 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 			preorder(root.right, list);
 		}
 	}
+	
+	public List<V> preorderLookUp(String key, int maxSize) {
+		List<V> list = new LinkedList<>();
+		preorderLookUp(root, list, key.toString(), maxSize);
+		return list;
+	}
 
+	private void preorderLookUp(Node<K, V> root, List<V> list, String key, int maxSize) {
+		
+		if (root != null) {
+			
+			key = key.toUpperCase();
+			
+			int keySize = key.length();
+			String currKey = root.key.toString();
+			String subCurrKey = currKey.substring(0, keySize).toUpperCase();
+			
+			if (list.size() >= maxSize) {
+				list = list.subList(0, maxSize);
+				return;
+			}			
+			
+			if(subCurrKey.equalsIgnoreCase(key)) {
+				list.addAll(root.values);
+			}
+			
+			if ((int) key.compareTo(subCurrKey) <= 0) {
+				preorderLookUp(root.left, list, key, maxSize);
+			}
+			
+			if((int) key.compareTo(subCurrKey) >= 0) {
+				preorderLookUp(root.right, list, key, maxSize);
+			}
+			
+			
+		}
+	}
+	
 	public List<V> postorder() {
 		List<V> list = new ArrayList<>();
 		postorder(root, list);

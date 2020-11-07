@@ -111,7 +111,7 @@
                                           </HBox>
                                           <HBox alignment="CENTER" GridPane.columnIndex="1">
                                              <children>
-                                                <JFXTextField fx:id="searchText" labelFloat="true" prefHeight="26.0" prefWidth="703.0" promptText="Search terms" HBox.hgrow="SOMETIMES" />
+                                                <JFXTextField fx:id="searchText" labelFloat="true" onKeyTyped="#autoComplete" prefHeight="26.0" prefWidth="703.0" promptText="Search terms" HBox.hgrow="SOMETIMES" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="119.0" GridPane.columnIndex="2">

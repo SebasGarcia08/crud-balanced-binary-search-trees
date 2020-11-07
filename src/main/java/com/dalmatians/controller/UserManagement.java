@@ -3,29 +3,27 @@ package com.dalmatians.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import org.controlsfx.control.textfield.TextFields;
 
 import com.dalmatians.model.Database;
 import com.dalmatians.model.Person;
 import com.dalmatians.model.RandomPersonGenerator;
-import com.dalmatians.threads.PersonGeneratorService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
-import javafx.application.Platform;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
 public class UserManagement implements Initializable {
@@ -91,14 +89,38 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Name");
 		searchingCriterion.getItems().add("Surname");
 		searchingCriterion.getItems().add("Full Name");
-		numUsersToGenerate.setText(100 + "");
+		searchingCriterion.getSelectionModel().selectFirst();
+		numUsersToGenerate.setText(Integer.MAX_VALUE + "");
 	}
 
 	@FXML
 	void clearDatabase(ActionEvent event) {
 		
 	}
+	
 
+    @FXML
+    void autoComplete(KeyEvent event) {
+    	
+    	String selectedCriterion = searchingCriterion.getValue();
+    	String key = searchText.getText();
+    	List<Person> values = new LinkedList<Person>();
+    	
+    	if(selectedCriterion.equals("Id")) {
+    		values = db.getIdTree().autoComplete(key, 100);
+    	}else if(selectedCriterion.equals("Name")) {
+    		
+    	}else if (selectedCriterion.equals("Surname")){
+    		
+    	}else if(selectedCriterion.equals("Full Name")) {
+    		values = db.getFullnameTree().autoComplete(key, 100);
+    	}
+    	
+    	System.out.println(values);
+    	
+    	TextFields.bindAutoCompletion(searchText, values);
+    }
+	
 	@FXML
 	void generateUsers(ActionEvent event) {
 		try {
