@@ -3,16 +3,19 @@ package com.dalmatians.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import com.dalmatians.model.Database;
 import com.dalmatians.model.Person;
+import com.dalmatians.model.RandomPersonGenerator;
 import com.dalmatians.threads.PersonGeneratorService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.concurrent.Service;
@@ -26,8 +29,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class UserManagement implements Initializable {
-
-	private static final int N_CORES = Runtime.getRuntime().availableProcessors();
 
 	@FXML
 	private JFXTextField numUsersToGenerate;
@@ -75,48 +76,14 @@ public class UserManagement implements Initializable {
 	private ProgressIndicator progressIndicator;
 
 	private Database db;
-
-	private PersonGeneratorService[] personGenerators;
+	
+	private RandomPersonGenerator randomGenerator;
 
 	public UserManagement() {
 		db = new Database();
-		this.personGenerators = new PersonGeneratorService[N_CORES];
-		
-		for (int i = 0; i < personGenerators.length; i++) {
-			personGenerators[i] = new PersonGeneratorService(this, db);
-		}
+		randomGenerator = new RandomPersonGenerator(db);
 	}
-
-	/**
-	 * Divides the progress of a progress bar into n Services concurrent tasks
-	 * 
-	 * task{0}.progressProperty().multiply(rate).add(
-	 * 		task{1}.progressProperty().multiply(rate).add( 
-	 * 			task{n-1}.progressProperty().add(0)
-	 * 		)
-	 * )
-	 * 
-	 * @param <T>, a Service subclass
-	 * @param tasks
-	 * @param i
-	 * @return
-	 */
-	public <T extends Service<Void>> DoubleBinding getProgressBinding(T[] tasks, int i) {
-		if (i < tasks.length) {
-			return tasks[i].progressProperty().multiply(1.0/tasks.length).add(
-						getProgressBinding(tasks, i + 1)
-					);
-		} else {
-			return new DoubleBinding() {
-				
-				@Override
-				protected double computeValue() {
-					return 0;
-				}
-			};
-		}
-	}
-
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		progressGridpane.setVisible(false);
@@ -125,13 +92,11 @@ public class UserManagement implements Initializable {
 		searchingCriterion.getItems().add("Surname");
 		searchingCriterion.getItems().add("Full Name");
 		numUsersToGenerate.setText(100 + "");
-		operationsProgressBar.progressProperty().bind(getProgressBinding(personGenerators, 0));
-		progressIndicator.progressProperty().bind(getProgressBinding(personGenerators, 0));
 	}
 
 	@FXML
 	void clearDatabase(ActionEvent event) {
-
+		
 	}
 
 	@FXML
@@ -141,16 +106,11 @@ public class UserManagement implements Initializable {
 			int n = Integer.parseInt(numUsersToGenerate.getText());
 			progressMessage.setText("Generating " + n + " persons...");
 			db.preapteForGenerate(n);
+
+			randomGenerator.reset(0, n);
 			
-			int start = 0;
-			int amount = n / personGenerators.length;
 			
-			for(int i = 0; i < personGenerators.length-1; i++) {
-				personGenerators[i].generate(start, start + amount);
-				start += amount;
-			}
 			
-			personGenerators[personGenerators.length-1].generate(start, n);
 			
 		} catch (NumberFormatException | IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -186,10 +146,10 @@ public class UserManagement implements Initializable {
 	public void setProgressMessage(String msg) {
 		this.progressMessage.setText(msg);
 	}
-
-	public ProgressBar getOperationsProgressBar() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public void updateProgress(double progress, int n) {
+		operationsProgressBar.setProgress(progress / n);
+		progressIndicator.setProgress(progress / n);
 	}
 
 }

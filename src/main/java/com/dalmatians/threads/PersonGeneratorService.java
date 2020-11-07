@@ -21,8 +21,7 @@ public class PersonGeneratorService extends Service<Void> {
 	private UserManagement controller;
 
 	public PersonGeneratorService(UserManagement controller, Database db) {
-		randomPersonGen = new RandomPersonGenerator(db.getSurnames(), db.getNationalities(),
-				db.getNationalitiesProportions(), db.getGender2Name());
+		randomPersonGen = new RandomPersonGenerator(db);
 		this.controller = controller;
 		setOnSucceeded((s) -> {
 			System.out.println("Finished!!!");

@@ -43,12 +43,11 @@ public class RandomPersonGenerator {
 	
 	private int end;
 	
-	public RandomPersonGenerator(String[] surnames, String[] natioanlities, double[] natilalitiesProportions,
-			HashMap<String, String[]> gender2Name) {
-		this.surnames = surnames;
-		this.nationalities = natioanlities;
-		this.nationalitiesProportions = natilalitiesProportions;
-		this.gender2Name = gender2Name;
+	public RandomPersonGenerator(Database db) {
+		this.surnames = db.getSurnames();
+		this.nationalities = db.getNationalities();
+		this.nationalitiesProportions = db.getNationalitiesProportions();
+		this.gender2Name = db.getGender2Name();
 
 		femaleHeightsGenerator = new RandomGaussian(1.65, 0.05);
 		maleHeightsGenerator = new RandomGaussian(1.72, 0.05);
