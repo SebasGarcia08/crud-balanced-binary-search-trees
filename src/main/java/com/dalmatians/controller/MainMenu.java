@@ -1,5 +1,6 @@
 package com.dalmatians.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -59,6 +60,11 @@ public class MainMenu implements Initializable {
     
     @FXML
     void exit(ActionEvent event) { 	
+    	try {
+			userManagementController.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     	System.exit(0);
     }
 

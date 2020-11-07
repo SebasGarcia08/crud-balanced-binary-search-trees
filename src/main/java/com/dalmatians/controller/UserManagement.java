@@ -474,4 +474,8 @@ public class UserManagement implements Initializable {
 	public void updatePeopleInDB() {
 		numberOfPeopleLbl.setText(db.getPeople().length + " people in database");
 	}
+	
+	public void save() throws IOException {
+		db.save();
+	}
 }

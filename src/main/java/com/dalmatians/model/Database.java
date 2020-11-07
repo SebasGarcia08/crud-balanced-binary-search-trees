@@ -178,7 +178,7 @@ public class Database implements Serializable {
 		return null;
 	}
 
-	public void save(String path) throws IOException {
+	public void save() throws IOException {
 		FileOutputStream file = new FileOutputStream(SERIALIZATION_PATH);
 		ObjectOutputStream out = new ObjectOutputStream(file);
 		out.writeObject(this);
